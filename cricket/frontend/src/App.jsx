@@ -1,22 +1,13 @@
-import {useEffect, useState} from 'react';
 import './App.css';
-import axios from 'axios';
 
 function App() {
-  const [data, setData] = useState('')
-
-  useEffect(() => {
-    axios.get('/api')
-        .then(res => setData(res.data))
-        .catch(err => console.log(err))
-  }, []);
-
-  console.log(data);
-
   return (
-    <>
-      받아온 값 : {data}
-    </>
+    <div className="App">
+      <header className="App-header">
+        <h1>Cricket 프로젝트에 오신 것을 환영합니다!</h1>
+        <p>이 화면은 React로 구성되었습니다.</p>
+      </header>
+    </div>
   )
 }
 
