@@ -18,8 +18,8 @@ public class JwtSessionInvalidateFilter extends OncePerRequestFilter {
         boolean hasAccessToken = false;
         if (request.getCookies() != null) {
             hasAccessToken = Arrays.stream(request.getCookies())
-                    .anyMatch(cookie -> "access_token".equals(cookie.getName()) && cookie.getValue() != null
-                            && !cookie.getValue().isEmpty());
+                .anyMatch(cookie -> "access_token".equals(cookie.getName()) && cookie.getValue() != null
+                    && !cookie.getValue().isEmpty());
         }
 
         if (!hasAccessToken) {

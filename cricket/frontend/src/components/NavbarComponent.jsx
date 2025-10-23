@@ -1,9 +1,13 @@
 import React from "react";
 import {Button, Container, Form, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import { Route, Routes, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 function NavbarComponent() {
   let navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth();
+
+  console.log(user);
 
   return (
     <>
@@ -45,8 +49,19 @@ function NavbarComponent() {
             </Nav>
 
             <Nav>
-              <Nav.Link style={{fontSize: '14px'}} onClick={() => {navigate('/login')}}>로그인</Nav.Link>
-              <Nav.Link style={{fontSize: '14px'}} onClick={() => {navigate('/register')}}>회원가입</Nav.Link>
+              {isAuthenticated ? (
+                <>
+                  <Navbar.Text className="me-3">
+                    Welcome, {user.name}
+                  </Navbar.Text>
+                  <Button variant="outline-success" onClick={logout}>Logout</Button>
+                </>
+              ) : (
+                <>
+                  <Nav.Link style={{fontSize: '14px'}} onClick={() => {navigate('/login')}}>로그인</Nav.Link>
+                  <Nav.Link style={{fontSize: '14px'}} onClick={() => {navigate('/register')}}>회원가입</Nav.Link>
+                </>
+              )}
             </Nav>
             <Form className="d-flex">
               <Form.Control

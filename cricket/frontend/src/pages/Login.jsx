@@ -1,12 +1,16 @@
 import React, {useState} from "react";
 import {Button, Form, FloatingLabel, InputGroup, Tab, Tabs} from 'react-bootstrap';
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [formData, setFormData] = useState({
     id: "",
     password: "",
   });
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -21,6 +25,9 @@ function Login() {
       const res = await axios.post("http://localhost:8080/api/login", formData);
       console.log("서버 응답:", res.data);
       alert("로그인 성공!");
+
+      login(res.data.user); // Pass user data to login function
+      navigate("/"); // Redirect to main page
     } catch (err) {
       console.error("로그인 실패:", err);
       alert("로그인 실패!");

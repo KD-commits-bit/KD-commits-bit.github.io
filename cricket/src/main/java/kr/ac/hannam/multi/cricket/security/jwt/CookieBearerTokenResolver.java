@@ -14,11 +14,11 @@ public class CookieBearerTokenResolver {
 
     public String resolve(HttpServletRequest request) {
         return Optional.ofNullable(request.getCookies())
-                .map(Arrays::stream)
-                .orElse(Stream.empty())
-                .filter(c -> ACCESSTOKENCOOKIE.equals(c.getName()))
-                .findFirst()
-                .map(Cookie::getValue)
-                .orElse(null);
+                       .map(Arrays::stream)
+                       .orElse(Stream.empty())
+                       .filter(c -> ACCESSTOKENCOOKIE.equals(c.getName()))
+                       .findFirst()
+                       .map(Cookie::getValue)
+                       .orElse(null);
     }
 }

@@ -59,6 +59,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- logging 지원 -->
+        <dependency>
+            <groupId>com.github.gavlyukovskiy</groupId>
+            <artifactId>p6spy-spring-boot-starter</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+
         <!-- jsp 지원 -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
