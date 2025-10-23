@@ -1,7 +1,9 @@
 package kr.ac.hannam.multi.cricket.vo;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @NoArgsConstructor
