@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.hannam.multi.cricket.common.mapper.FileMapper">
+    <resultMap id="CarImageMap" type="map">
+        <result column="CAR_IMAGE_ID" property="carImageId"/>
+        <result column="CAR_ID" property="carId"/>
+        <result column="IS_PRIMARY" property="isPrimary"/>
+    </resultMap>
+
+    <insert id="insertCarImage">
+        INSERT INTO ADMIN.CAR_IMAGES (
+            CAR_IMAGE_ID,
+            CAR_ID,
+            CAR_IMAGE_CONTENT,
+            IS_PRIMARY
+        ) VALUES (
+                     #{carImageId},
+                     #{carId},
+                     EMPTY_BLOB(),
+                     #{isPrimary}
+                 )
+    </insert>
+
+
+
+    <select id="selectCarImages" resultType="map">
+        SELECT CAR_IMAGE_ID AS carImageId,
+               CAR_ID AS carId,
+               IS_PRIMARY AS isPrimary
+        FROM ADMIN.CAR_IMAGES
+        ORDER BY CAR_IMAGE_ID DESC
+    </select>
+
+    <select id="selectCarImagesByCarId" resultMap="CarImageMap">
+        SELECT
+            CAR_IMAGE_ID,
+            CAR_ID,
+            IS_PRIMARY
+        FROM ADMIN.CAR_IMAGES
+        WHERE CAR_ID = #{carId}
+        ORDER BY CAR_IMAGE_ID DESC
+    </select>
+
+    <delete id="deleteCarImage">
+        DELETE FROM ADMIN.CAR_IMAGES WHERE CAR_IMAGE_ID = #{carImageId}
+    </delete>
+</mapper>

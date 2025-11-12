@@ -66,6 +66,8 @@ public class SpringSecurityConfig {
                 .requestMatchers("/", "/index.html", "/static/**", "/assets/**", "/vite.svg", "/manifest.json").permitAll()
                 // 로그인, 회원가입 API는 모두 허용
                 .requestMatchers("/api/login", "/api/register").permitAll()
+                //파일 업로드 엔드포인트 허용
+                .requestMatchers("/file/**").permitAll()
                 // 그 외 모든 요청은 인증된 사용자만 접근 가능
                 .anyRequest().authenticated()
             );
