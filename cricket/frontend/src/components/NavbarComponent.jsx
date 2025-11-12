@@ -13,8 +13,9 @@ function NavbarComponent() {
     <>
       <Navbar
         expand="lg"
+        fixed="top"
         className="bg-body-tertiary"
-        style={{ padding: "20px" }}
+        style={{ padding: "20px", zIndex: 1000 }}
       >
         <Container fluid>
           <Navbar.Brand href="/">Logo</Navbar.Brand>
