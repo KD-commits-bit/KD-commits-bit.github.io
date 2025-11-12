@@ -14,7 +14,7 @@ public class UserVO {
     private String userName;
     private String userNickname;
     private String userRegion;
-    private String userProfileImg;
+    private byte[] userProfileImg;
     private String userPhone;
     private String userCreatedAt;
 }

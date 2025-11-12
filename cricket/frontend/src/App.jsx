@@ -4,6 +4,7 @@ import NavbarComponent from "./components/NavbarComponent.jsx";
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
+import CarouselComponent from "./components/CarouselComponent.jsx";
 
 
 function App() {
@@ -13,24 +14,27 @@ function App() {
         <Route path="/" element={
           <>
             <NavbarComponent />
-            <header className="App-header" style={{textAlign: 'center'}}>
-              <h1>메인화면 사진 들어가면 좋을듯</h1>
-              <p>이 화면은 React로 구성되었습니다.</p>
+            <header className="App-header" style={{textAlign: "center", paddingTop: '80px', marginBottom: "50px"}}>
+              <CarouselComponent />
             </header>
-            <div
+
+            <section
               style={{
+                minHeight: "100vh",
+                backgroundColor: "#f9f9f9",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 flexWrap: "wrap",
                 width: "80%",
                 margin: "0 auto",
+                paddingBottom: "100px",
               }}
             >
               <CardComponent />
               <CardComponent />
               <CardComponent />
-            </div>
+            </section>
           </>
         } />
         <Route path="/login" element={<Login />} />
