@@ -5,9 +5,36 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import CarouselComponent from "./components/CarouselComponent.jsx";
+import axios from "axios";
+import {useState, useEffect} from "react";
 
 
 function App() {
+  const [cars, setCars] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/car/all")
+      .then((response) => {
+        setCars(response.data);
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.error("Error fetching car data:", e);
+        setError(e);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div>로딩중...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div className="App">
       <Routes>
@@ -31,9 +58,9 @@ function App() {
                 paddingBottom: "100px",
               }}
             >
-              <CardComponent />
-              <CardComponent />
-              <CardComponent />
+              {cars.map((car) => (
+                <CardComponent key={car.carId} car={car} />
+              ))}
             </section>
           </>
         } />

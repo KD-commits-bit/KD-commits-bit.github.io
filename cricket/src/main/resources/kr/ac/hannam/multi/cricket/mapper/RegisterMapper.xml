@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.hannam.multi.cricket.register.mapper.RegisterMapper">
+    <insert id="insertUser">
+        INSERT INTO USERS (
+            USER_NO
+            , USER_EMAIL
+            , USER_PASSWORD
+            , USER_NAME
+            , USER_REGION
+            , USER_PHONE
+            , USER_CREATED_AT
+        )
+        VALUES (
+            'user' || LPAD(user_seq.NEXTVAL, 3, '0')
+            , #{userEmail}
+            , #{userPassword}
+            , #{userName}
+            , #{userRegion}
+            , #{userPhone}
+            , SYSDATE
+        )
+    </insert>
+
+    <select id="countByUserEmail" resultType="int">
+        SELECT COUNT(*)
+        FROM USERS
+        WHERE USER_EMAIL = #{userEmail}
+    </select>
+</mapper>

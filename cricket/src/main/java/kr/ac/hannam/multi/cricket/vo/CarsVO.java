@@ -3,6 +3,8 @@ package kr.ac.hannam.multi.cricket.vo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 @Data
 @EqualsAndHashCode(of = "carId")
 public class CarsVO {
@@ -15,4 +17,9 @@ public class CarsVO {
     private String carDescription;
     private String carStatus;
     private String carCreatedAt;
+
+    // added
+    private CarImagesVO carImages;
+    private CarModelsVO carModels;
+    private CarBrandsVO carBrands;
 }

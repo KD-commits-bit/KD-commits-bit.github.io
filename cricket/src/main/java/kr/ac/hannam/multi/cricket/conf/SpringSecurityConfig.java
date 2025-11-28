@@ -65,7 +65,9 @@ public class SpringSecurityConfig {
                 // React 빌드 파일 및 정적 자원들은 모두 허용
                 .requestMatchers("/", "/index.html", "/static/**", "/assets/**", "/vite.svg", "/manifest.json").permitAll()
                 // 로그인, 회원가입 API는 모두 허용
-                .requestMatchers("/api/login", "/api/register").permitAll()
+                .requestMatchers("/api/login", "/api/logout", "/api/register").permitAll()
+                // /api 엔드포인트 허용
+                .requestMatchers("/api/**").permitAll()
                 //파일 업로드 엔드포인트 허용
                 .requestMatchers("/file/**").permitAll()
                 // 그 외 모든 요청은 인증된 사용자만 접근 가능
