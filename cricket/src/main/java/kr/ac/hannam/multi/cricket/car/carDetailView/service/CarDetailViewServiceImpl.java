@@ -18,8 +18,7 @@ public class CarDetailViewServiceImpl implements CarDetailViewService {
 
     @Override
     public CarsVO readCarById(String carId) {
-        CarsVO car = carsMapper.selectCarById(carId);
-        return car;
+        return carsMapper.selectCarById(carId);
     }
 
     @Override
