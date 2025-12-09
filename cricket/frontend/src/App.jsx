@@ -7,6 +7,7 @@ import Register from "./pages/Register.jsx";
 import CarouselComponent from "./components/CarouselComponent.jsx";
 import axios from "axios";
 import {useState, useEffect} from "react";
+import CarDetailPage from "./pages/CarDetailPage.jsx";
 
 
 function App() {
@@ -66,6 +67,7 @@ function App() {
         } />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />}/>
+        <Route path="/cars/:carId" element={<CarDetailPage />} />
       </Routes>
     </div>
   );
