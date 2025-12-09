@@ -57,4 +57,33 @@
         LEFT JOIN CAR_MODELS CM ON C.MODEL_ID = CM.MODEL_ID
         LEFT JOIN CAR_BRANDS CB ON CM.BRAND_ID = CB.BRAND_ID
     </select>
+
+
+    <select id="selectCarById" resultMap="carsMap">
+        SELECT C.CAR_ID AS C_CAR_ID
+             , C.MODEL_ID AS C_MODEL_ID
+             , C.ADMIN_NO AS C_ADMIN_NO
+             , C.CAR_YEAR AS C_CAR_YEAR
+             , C.CAR_MILEAGE AS C_CAR_MILEAGE
+             , C.CAR_PRICE AS C_CAR_PRICE
+             , C.CAR_DESCRIPTION AS C_CAR_DESCRIPTION
+             , C.CAR_STATUS AS C_CAR_STATUS
+             , C.CAR_CREATED_AT AS C_CAR_CREATED_AT
+             , CI.CAR_IMAGE_ID AS CI_CAR_IMAGE_ID
+             , CI.CAR_ID AS CI_CAR_ID
+             , CI.IS_PRIMARY AS CI_IS_PRIMARY
+
+             , CM.MODEL_ID AS CM_MODEL_ID
+             , CM.MODEL_NAME AS CM_MODEL_NAME
+             , CM.BRAND_ID AS CM_BRAND_ID
+             , CB.BRAND_ID AS CB_BRAND_ID
+             , CB.BRAND_NAME AS CB_BRAND_NAME
+        FROM CARS C
+                 LEFT JOIN CAR_IMAGES CI ON C.CAR_ID = CI.CAR_ID
+                 LEFT JOIN CAR_MODELS CM ON C.MODEL_ID = CM.MODEL_ID
+                 LEFT JOIN CAR_BRANDS CB ON CM.BRAND_ID = CB.BRAND_ID
+        WHERE C.CAR_ID = #{carId}
+    </select>
+
+
 </mapper>

@@ -8,4 +8,5 @@ import java.util.List;
 @Mapper
 public interface CarsMapper {
     public List<CarsVO> selectAllCars();
+    public CarsVO selectCarById(String carId);
 }
