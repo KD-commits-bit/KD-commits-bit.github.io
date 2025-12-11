@@ -1,13 +1,18 @@
 import React from "react";
 import {Button, Container, Form, Nav, Navbar, NavDropdown} from 'react-bootstrap';
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 function NavbarComponent() {
-  let navigate = useNavigate();
-  const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const isAuthenticated = !!user;
 
-  console.log(user);
+  const handleLogout = () => {
+    logout();
+    alert('로그아웃 되었습니다.');
+    navigate('/');
+  };
 
   return (
     <>
@@ -18,7 +23,7 @@ function NavbarComponent() {
         style={{ padding: "20px", zIndex: 1000 }}
       >
         <Container fluid>
-          <Navbar.Brand href="/">Logo</Navbar.Brand>
+          <Navbar.Brand onClick={() => navigate('/')} style={{cursor: "pointer"}}>Logo</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
@@ -52,10 +57,20 @@ function NavbarComponent() {
             <Nav>
               {isAuthenticated ? (
                 <>
-                  <Navbar.Text className="me-3">
+                  <Navbar.Text
+                    className="me-3"
+                    onClick={() => {
+                      if (user && user.roles && user.roles.includes('ROLE_USER')) {
+                        navigate('/mypage');
+                      } else if (user && user.roles && user.roles.includes('ROLE_ADMIN')) {
+                        navigate('/');
+                      }
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
                     Welcome, {user.name}
                   </Navbar.Text>
-                  <Button variant="outline-success" onClick={logout}>Logout</Button>
+                  <Button variant="outline-success" onClick={handleLogout}>Logout</Button>
                 </>
               ) : (
                 <>

@@ -1,0 +1,84 @@
+/* 전체 페이지 패딩 & 배경 */
+.mypage-wrapper {
+    background-color: #f8f9fa;
+    padding-top: 100px;
+    padding-bottom: 50px;
+}
+
+/* 상단 프로필 요약 카드 */
+.profile-summary-card {
+    border: none;
+    border-radius: 12px;
+    padding: 25px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* 이름 / 정보수정 */
+.profile-name {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.profile-edit {
+    margin-top: 5px;
+    color: #999;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* 요약 박스 */
+.summary-boxes {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.summary-item .label {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.summary-item .value {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+/* 섹션 공통 */
+.section {
+    width: 100%;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.section-header h4 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.view-more {
+    color: #888;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* 카드 스타일 */
+.section card,
+.section .card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border: none;
+}
+
+/* 내용 없음 표시 */
+.empty-text {
+    text-align: center;
+    padding: 25px 0;
+    color: #999;
+    font-size: 15px;
+}
