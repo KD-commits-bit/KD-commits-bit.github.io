@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.hannam.multi.cricket.user.edituser.mapper.EditUserMapper">
+
+    <update id="updateUser">
+        UPDATE USERS
+        <set>
+            USER_EMAIL = #{email}
+            <if test="hashedPassword != null">
+                , USER_PASSWORD = #{hashedPassword}
+            </if>
+        </set>
+        WHERE USER_NO = #{userNo}
+    </update>
+
+    <select id="findUserNoByUserId" resultType="String">
+        SELECT USER_NO
+        FROM USERS
+        WHERE USER_EMAIL = #{userId}
+    </select>
+
+</mapper>
