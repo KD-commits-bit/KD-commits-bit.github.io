@@ -110,4 +110,38 @@
                  LEFT JOIN CAR_BRANDS CB ON CM.BRAND_ID = CB.BRAND_ID
         WHERE C.CAR_ID = #{carId}
     </select>
+
+
+
+
+    <insert id="insertCar" parameterType="CarsVO">
+
+        <selectKey resultType="string" keyProperty="carId" order="BEFORE">
+            SELECT 'car' ||
+            LPAD(NVL(TO_NUMBER(SUBSTR(MAX(CAR_ID), 4)), 0) + 1, 3, '0')
+            FROM ADMIN.CARS
+        </selectKey>
+
+        INSERT INTO ADMIN.CARS (
+            CAR_ID,
+            MODEL_ID,
+            ADMIN_NO,
+            CAR_YEAR,
+            CAR_MILEAGE,
+            CAR_PRICE,
+            CAR_DESCRIPTION,
+            CAR_STATUS,
+            CAR_CREATED_AT
+        ) VALUES (
+            #{carId},
+            #{modelId},
+            #{adminNo},
+            #{carYear},
+            #{carMileage},
+            #{carPrice},
+            #{carDescription},
+            #{carStatus}
+            TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+        );
+    </insert>
 </mapper>
