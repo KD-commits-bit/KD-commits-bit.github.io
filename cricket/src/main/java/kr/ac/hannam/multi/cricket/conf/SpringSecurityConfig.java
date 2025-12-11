@@ -66,7 +66,7 @@ public class SpringSecurityConfig {
                 // React 빌드 파일 및 정적 자원들은 모두 허용
                 .requestMatchers("/", "/index.html", "/static/**", "/assets/**", "/vite.svg", "/manifest.json").permitAll()
                 .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
-                .requestMatchers("/api/car/all").permitAll()
+                .requestMatchers("/api/car/**").permitAll()
                 .requestMatchers("/api/auth/me").authenticated()
                 .requestMatchers("/api/**").authenticated()
                 //파일 업로드 엔드포인트 허용
