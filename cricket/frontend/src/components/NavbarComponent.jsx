@@ -20,10 +20,10 @@ function NavbarComponent() {
         expand="lg"
         fixed="top"
         className="bg-body-tertiary"
-        style={{ padding: "20px", zIndex: 1000 }}
+        style={{ padding: "0px", zIndex: 1000 }}
       >
         <Container fluid>
-          <Navbar.Brand onClick={() => navigate('/')} style={{cursor: "pointer"}}>Logo</Navbar.Brand>
+          <Navbar.Brand onClick={() => navigate('/')} style={{cursor: "pointer"}}><img src={"/Logo.png"} alt={"Logo.png"} style={{ height: '80px', position: 'relative', top: '-5px' }}/></Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav

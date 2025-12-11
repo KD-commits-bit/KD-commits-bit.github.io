@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { useAuth } from '../hooks/useAuth';
 import apiClient from '../api/axios';
 import './Mypage.css';
+import {useNavigate} from "react-router-dom";
 
-function Mypage() {
-  const { user } = useAuth();
+function Mypage({user}) {
+  const navigate = useNavigate();
   const [favoriteCars, setFavoriteCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -51,7 +51,9 @@ function Mypage() {
             <Row>
               <Col md={3} className="text-center">
                 <div className="profile-name">{user.name}님</div>
-                <div className="profile-edit">정보 수정</div>
+                <div className="profile-edit" onClick={() => {
+                  navigate('/edit');
+                }}>정보 수정</div>
               </Col>
               <Col md={9}>
                 <Row className="summary-boxes">

@@ -47,29 +47,40 @@ public class AuthController {
         String token = jwtProvider.authenticationToToken(authentication);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getId());
-        
+
+        String no = null;
         String id = null;
         String name = null;
+        String phone = null;
+
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
         if (userDetails instanceof UserPrincipal) {
             UserVO user = ((UserPrincipal) userDetails).getUserVO();
+
+            no = user.getUserNo();
             id = user.getUserEmail();
             name = user.getUserName();
+            phone = user.getUserPhone();
         } else if (userDetails instanceof AdminPrincipal) {
             AdminVO admin = ((AdminPrincipal) userDetails).getAdminVO();
+
+            no = admin.getAdminNo();
             id = admin.getAdminEmail();
             name = admin.getAdminName();
+            phone = admin.getAdminPhone();
         }
 
         return ResponseEntity.ok(Map.of(
             "token", token,
             "user", Map.of(
+                "no", no,
                 "id", id,
                 "name", name,
-                "roles", roles
+                "roles", roles,
+                "phone", phone
             )
         ));
     }
@@ -88,18 +99,26 @@ public class AuthController {
 
         // DB에서 전체 사용자 정보를 다시 로드하여 이름을 가져옵니다.
         UserDetails fullUserDetails = userDetailsService.loadUserByUsername(id);
+        String no = null;
         String name = null;
+        String phone = null;
 
         if (fullUserDetails instanceof UserPrincipal) {
+            no = ((UserPrincipal) fullUserDetails).getUserVO().getUserNo();
             name = ((UserPrincipal) fullUserDetails).getUserVO().getUserName();
+            phone = ((UserPrincipal) fullUserDetails).getUserVO().getUserPhone();
         } else if (fullUserDetails instanceof AdminPrincipal) {
+            no = ((AdminPrincipal) fullUserDetails).getAdminVO().getAdminNo();
             name = ((AdminPrincipal) fullUserDetails).getAdminVO().getAdminName();
+            phone = ((AdminPrincipal) fullUserDetails).getAdminVO().getAdminPhone();
         }
 
         return ResponseEntity.ok(Map.of(
+            "no", no,
             "id", id,
             "name", name,
-            "roles", roles
+            "roles", roles,
+            "phone", phone
         ));
     }
 }
