@@ -8,6 +8,7 @@ import CarouselComponent from "./components/CarouselComponent.jsx";
 import axios from "axios";
 import {useState, useEffect} from "react";
 import Mypage from "./pages/Mypage.jsx";
+import CarDetailPage from "./pages/CarDetailPage.jsx";
 
 
 function App() {
@@ -73,6 +74,7 @@ function App() {
             <Mypage />
           </>
         } />
+        <Route path="/cars/:carId" element={<CarDetailPage />} />
       </Routes>
     </div>
   );
