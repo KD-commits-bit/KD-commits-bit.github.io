@@ -30,4 +30,14 @@ public class GlobalExceptionHandler {
         error.put("error", ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(AlreadyFavoriteException.class)
+    public ResponseEntity<?> handleAlreadyFavorite(AlreadyFavoriteException ex) {
+        return ResponseEntity
+            .status(HttpStatus.CONFLICT) // 409
+            .body(Map.of(
+                "error", "ALREADY_FAVORITE",
+                "message", ex.getMessage()
+            ));
+    }
 }

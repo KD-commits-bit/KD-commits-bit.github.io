@@ -83,7 +83,7 @@ function App() {
             <EditProfile user={user}/>
           </>
         }/>
-        <Route path="/cars/:carId" element={<CarDetailPage/>}/>
+        <Route path="/cars/:carId" element={<CarDetailPage user={user}/>}/>
       </Routes>
     </div>
   );

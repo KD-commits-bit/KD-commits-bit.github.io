@@ -13,10 +13,10 @@ public interface FavoriteService {
 
     /**
      * 찜하기 취소
-     * @param userId 사용자 ID
+     * @param userNo 사용자 No
      * @param carId 자동차 ID
      */
-    void removeFavorite(String userId, String carId);
+    void removeFavorite(String userNo, String carId);
 
     /**
      * 찜한 차량 목록 가져오기

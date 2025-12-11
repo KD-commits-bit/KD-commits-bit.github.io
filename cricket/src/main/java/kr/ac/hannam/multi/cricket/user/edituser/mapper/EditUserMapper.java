@@ -11,5 +11,7 @@ public interface EditUserMapper {
                           @Param("email") String email
     );
 
-    String findUserNoByUserId(@Param("userId") String userId);
+    public int deleteUser(@Param("userNo") String userNo);
+
+    public String findUserNoByUserId(@Param("userId") String userId);
 }

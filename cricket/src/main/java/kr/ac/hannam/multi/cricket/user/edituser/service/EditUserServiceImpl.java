@@ -31,4 +31,13 @@ public class EditUserServiceImpl implements EditUserService {
         // 3. Update user profile
         editUserMapper.updateUser(userNo, hashedPassword, request.getEmail());
     }
+
+    @Override
+    public void removeUser(String authenticatedUserId) {
+        String userNo = editUserMapper.findUserNoByUserId(authenticatedUserId);
+        if (userNo == null || userNo.isEmpty()) {
+            throw new IllegalArgumentException("User not found for ID: " + authenticatedUserId);
+        }
+        editUserMapper.deleteUser(userNo);
+    }
 }

@@ -10,10 +10,13 @@ function Mypage({user}) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  console.log(favoriteCars);
+
   const fetchFavoriteCars = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await apiClient.get("/api/favorites");
+      const response = await apiClient.get(`/api/favorites?userNo=${user.no}`);
+
       setFavoriteCars(response.data);
     } catch (e) {
       console.error("Error fetching favorite car data:", e);
@@ -32,7 +35,7 @@ function Mypage({user}) {
       return;
     }
     try {
-      await apiClient.delete(`/api/favorites/${carId}`);
+      await apiClient.delete(`/api/favorites/${carId}?userNo=${user.no}`);
       // 삭제 후 목록을 다시 불러옵니다.
       fetchFavoriteCars();
     } catch (e) {
@@ -84,17 +87,23 @@ function Mypage({user}) {
               {favoriteCars.length > 0 ? (
                 favoriteCars.map((car) => (
                   <Col md={4} className="mb-4" key={car.carId}>
-                    <Card>
-                      {/* carImages가 있고, 내용이 있을 때만 첫 번째 이미지를 보여줍니다. */}
-                      <Card.Img variant="top" src={car.carImages && car.carImages.length > 0 ? car.carImages[0].carImageContent : 'https://via.placeholder.com/300x200'} />
-                      <Card.Body>
-                        <Card.Title>{car.carBrands.brandName} {car.carModels.modelName}</Card.Title>
-                        <Card.Text>
-                          {car.carYear} | {car.carMileage}km | {car.carPrice / 10000}만원
-                        </Card.Text>
-                        <Button variant="danger" onClick={() => handleRemoveFavorite(car.carId)}>찜 취소</Button>
-                      </Card.Body>
-                    </Card>
+                    <div onClick={() => navigate(`/cars/${car.carId}`)} style={{ cursor: 'pointer' }}>
+                      <Card>
+                        <Card.Img variant="top" src={car.carImages.carImageId} />
+                        <Card.Body>
+                          <Card.Title>{car.carBrands.brandName} {car.carModels.modelName}</Card.Title>
+                          <Card.Text>
+                            {car.carYear} 년식 | {car.carMileage} km | {car.carPrice} 만원
+                          </Card.Text>
+                          <Button variant="danger" onClick={(e) => {
+                            e.stopPropagation();
+
+                            handleRemoveFavorite(car.carId);
+                          }}>찜 취소</Button>
+                        </Card.Body>
+                      </Card>
+                    </div>
+
                   </Col>
                 ))
               ) : (
