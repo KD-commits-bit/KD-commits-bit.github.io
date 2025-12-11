@@ -1,5 +1,6 @@
 package kr.ac.hannam.multi.cricket.conf;
 
+import jakarta.servlet.http.HttpServletResponse;
 import kr.ac.hannam.multi.cricket.filter.JwtAuthenticationFilter;
 import kr.ac.hannam.multi.cricket.security.jwt.JWTProvider;
 import org.springframework.context.annotation.Bean;
@@ -64,14 +65,22 @@ public class SpringSecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 // React 빌드 파일 및 정적 자원들은 모두 허용
                 .requestMatchers("/", "/index.html", "/static/**", "/assets/**", "/vite.svg", "/manifest.json").permitAll()
-                // 로그인, 회원가입 API는 모두 허용
-                .requestMatchers("/api/login", "/api/logout", "/api/register").permitAll()
-                // /api 엔드포인트 허용
-                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                .requestMatchers("/api/car/all").permitAll()
+                .requestMatchers("/api/auth/me").authenticated()
+                .requestMatchers("/api/**").authenticated()
                 //파일 업로드 엔드포인트 허용
                 .requestMatchers("/file/**").permitAll()
                 // 그 외 모든 요청은 인증된 사용자만 접근 가능
                 .anyRequest().authenticated()
+            )
+            
+            // 6. 로그아웃 설정
+            .logout(logout -> logout
+                .logoutUrl("/api/auth/logout")
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                })
             );
 
         return http.build();

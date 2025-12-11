@@ -7,6 +7,7 @@ import Register from "./pages/Register.jsx";
 import CarouselComponent from "./components/CarouselComponent.jsx";
 import axios from "axios";
 import {useState, useEffect} from "react";
+import Mypage from "./pages/Mypage.jsx";
 
 
 function App() {
@@ -66,6 +67,12 @@ function App() {
         } />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />}/>
+        <Route path="/mypage" element={
+          <>
+            <NavbarComponent />
+            <Mypage />
+          </>
+        } />
       </Routes>
     </div>
   );
