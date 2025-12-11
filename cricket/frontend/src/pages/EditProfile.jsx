@@ -59,6 +59,27 @@ export default function EditProfile({user}) {
     }
   };
 
+  const handleDelete = async (e) => {
+    e.preventDefault();
+
+    if (!window.confirm('정말로 회원 탈퇴를 하시겠습니까? 모든 정보가 삭제됩니다.')) {
+      return;
+    }
+
+    try {
+      const resp = await api.delete('/api/user/delete');
+
+      console.log('Delete success:', resp);
+      alert('회원 탈퇴가 완료되었습니다.');
+
+      logout();
+      navigate('/');
+    } catch (e) {
+      console.error('Delete failed:', e);
+      alert('회원 탈퇴에 실패했습니다: ' + (e.response?.data?.message || e.message));
+    }
+  }
+
   console.log("User:", user);
 
   return (
@@ -170,7 +191,7 @@ export default function EditProfile({user}) {
               <Form.Label className="fw-bold">회원 탈퇴</Form.Label>
             </Col>
             <Col>
-              <Button variant="outline-secondary">회원 탈퇴</Button>
+              <Button variant="outline-secondary" onClick={handleDelete}>회원 탈퇴</Button>
             </Col>
           </Row>
         </Form.Group>

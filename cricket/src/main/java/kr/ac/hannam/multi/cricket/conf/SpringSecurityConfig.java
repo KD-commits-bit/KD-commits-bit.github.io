@@ -67,6 +67,7 @@ public class SpringSecurityConfig {
                 .requestMatchers("/", "/index.html", "/static/**", "/assets/**", "/vite.svg", "/manifest.json").permitAll()
                 .requestMatchers("/api/auth/login", "/api/register", "/api/register/**").permitAll()
                 .requestMatchers("/api/car/**").permitAll()
+                .requestMatchers("/api/favorites/check").permitAll()
                 .requestMatchers("/api/auth/me").authenticated()
                 .requestMatchers("/api/**").authenticated()
                 //파일 업로드 엔드포인트 허용

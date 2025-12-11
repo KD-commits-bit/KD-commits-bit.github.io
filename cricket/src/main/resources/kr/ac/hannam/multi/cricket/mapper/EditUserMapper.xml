@@ -13,6 +13,11 @@
         WHERE USER_NO = #{userNo}
     </update>
 
+    <delete id="deleteUser">
+        DELETE FROM USERS
+        WHERE USER_NO = #{userNo}
+    </delete>
+
     <select id="findUserNoByUserId" resultType="String">
         SELECT USER_NO
         FROM USERS

@@ -3,13 +3,13 @@
 <mapper namespace="kr.ac.hannam.multi.cricket.common.mapper.FavoriteMapper">
 
     <insert id="insertFavorite" parameterType="kr.ac.hannam.multi.cricket.vo.FavoriteVO">
-        INSERT INTO favorite (user_no, car_id, created_at)
-        VALUES (#{userId}, #{carId}, NOW())
+        INSERT INTO favorite (favorite_id, user_no, car_id, created_at)
+        VALUES ('fav' || LPAD(FAVORITE_SEQ.NEXTVAL, 3, '0'), #{userNo}, #{carId}, SYSDATE)
     </insert>
 
     <delete id="deleteFavorite">
         DELETE FROM favorite
-        WHERE user_no = #{userId} AND car_id = #{carId}
+        WHERE user_no = #{userNo} AND car_id = #{carId}
     </delete>
 
     <select id="findFavoritesByUserId" resultType="kr.ac.hannam.multi.cricket.vo.FavoriteVO">

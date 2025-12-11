@@ -171,7 +171,7 @@
 
 .side-price-main {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 4px;
   margin-top: 6px;
 }
@@ -313,6 +313,49 @@
   font-weight: 700;
   color: #111;
 }
+
+/* 찜하기 버튼 */
+.wish-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #444;
+    transition: all 0.2s ease-in-out;
+    margin-left: auto;
+}
+
+.wish-btn.active {
+    border-color: #ff4b4b !important;
+    color: #ff4b4b !important;
+}
+
+.wish-btn:hover {
+    border-color: #ff4b4b;
+    color: #ff4b4b;
+}
+
+.wish-icon {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.wish-btn:active {
+    transform: scale(0.97);
+}
+
+/* Style for favorited state */
+.wish-btn.favorited .wish-icon {
+    color: red; /* Make the heart icon red when favorited */
+}
+
+
 /* =========================
    반응형
 ========================= */
