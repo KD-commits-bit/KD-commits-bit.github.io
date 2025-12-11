@@ -1,0 +1,70 @@
+.admin-container {
+  padding-top: 80px;
+  padding: 30px;
+}
+
+.admin-title {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.admin-subtitle {
+  color: #666;
+  margin-bottom: 40px;
+}
+
+/* 대시보드 카드 3개 */
+.admin-dashboard {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-card {
+  flex: 1;
+  min-width: 250px;
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.admin-number {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #2a7cff;
+}
+
+/* 기능 섹션 */
+.admin-section {
+  margin-top: 50px;
+}
+
+.admin-section h2 {
+  margin-bottom: 20px;
+}
+
+.admin-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.admin-btn {
+  padding: 15px 20px;
+  min-width: 180px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #2a7cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.admin-btn:hover {
+  background: #1a5fdc;
+}
