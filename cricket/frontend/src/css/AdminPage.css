@@ -1,0 +1,238 @@
+/* 전체 래퍼 */
+.admin-warpper {
+  background: #f6f8fb;
+  min-height: 100vh;
+  padding: 28px 24px;
+}
+
+/* 상단 헤더 */
+.admin-hero {
+  max-width: 1180px;
+  margin: 0 auto 22px;
+  padding: 8px 12px;
+}
+
+.admin-title {
+  font-size: 30px;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 6px;
+}
+
+.admin-subtitle {
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ------------------------
+   대시보드 카드 (grid)
+   ------------------------ */
+.admin-dashboard {
+  max-width: 1180px;
+  margin: 18px auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+/* 카드 기본 */
+.admin-card {
+  background: linear-gradient(180deg, #fff, #fbfdff);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(20, 40, 80, 0.06);
+  border: 1px solid rgba(15, 30, 60, 0.03);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* hover effect */
+.admin-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(20, 40, 80, 0.09);
+}
+
+.card-top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(58,123,213,0.12), rgba(58,123,213,0.06));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-meta {
+  flex: 1;
+}
+
+.card-title {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.card-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f1724;
+}
+
+/* delta (증감) */
+.card-delta {
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #10b981;
+}
+.card-delta.down {
+  color: #ef4444;
+}
+
+/* ------------------------
+   관리 기능 / 빠른 액션
+   ------------------------ */
+.admin-actions {
+  max-width: 1180px;
+  margin: 24px auto;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 18px;
+}
+
+/* 왼쪽 영역 */
+.actions-left .section-heading {
+  font-size: 18px;
+  margin: 0 0 6px;
+}
+.actions-left .muted {
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+/* 버튼 그룹 */
+.admin-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.admin-btn {
+  background: #ffffff;
+  color: #0f1724;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(15, 30, 60, 0.06);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.admin-btn.primary {
+  background: linear-gradient(180deg,#1E88E5,#8E88E0);
+  color: #fff;
+  border: none;
+  box-shadow: 0 6px 18px rgba(216, 25, 32, 0.12);
+}
+
+.admin-btn:hover {
+  transform: translateY(-4px);
+}
+
+/* 오른쪽 quick card */
+.actions-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quick-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(15, 30, 60, 0.04);
+  box-shadow: 0 6px 14px rgba(20,40,80,0.03);
+}
+
+.quick-card-title {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.quick-card-body {
+  font-size: 14px;
+  color: #111827;
+}
+
+/* tiny grid for quick stats */
+.quick-card .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* ------------------------
+   최근 활동 리스트
+   ------------------------ */
+.recent-activity {
+  max-width: 1180px;
+  margin: 10px auto 80px;
+}
+
+.recent-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.recent-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(15,30,60,0.03);
+  background: #fff;
+  margin-bottom: 8px;
+}
+
+.recent-text {
+  color: #111827;
+  font-weight: 600;
+}
+
+.recent-time {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* 반응형 */
+@media (max-width: 1100px) {
+  .admin-dashboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-dashboard {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .admin-buttons {
+    flex-direction: column;
+  }
+}

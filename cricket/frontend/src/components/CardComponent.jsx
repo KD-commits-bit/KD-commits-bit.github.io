@@ -1,23 +1,26 @@
-import React from "react";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { useNavigate } from "react-router-dom";
+import React, { useMemo } from "react";
 
 function CardComponent({ car }) { // Destructure 'car' directly from props
   console.log("CardComponent received car:", car);
 
   const navigate = useNavigate();
 
-  // carImages is now a single object, not an array.
-  // Check if car.carImages exists and has carImageId
-  const imageUrl = car.carImages && car.carImages.carImageId ? car.carImages.carImageId : "https://via.placeholder.com/150"; // Placeholder image URL
+  const images = useMemo(() => car?.carImages || [], [car]);
+
+  const mainImageUrl =
+    images.find((img) => img.isPrimary === "Y")?.carImageId ||
+    images[0]?.carImageId ||
+    "https://via.placeholder.com/300x180?text=No+Image";
 
   const handleDetailClick = () => {
     navigate(`/cars/${car.carId}`);
-  }
+  };
   return (
     <Card style={{width: '18rem', margin: '30px'}}>
-      <Card.Img variant="top" src={imageUrl} alt={car.carModels?.modelName || "Car Image"} style={{height: '180px', objectFit: 'cover'}} />
+      <Card.Img variant="top" src={mainImageUrl} alt={car.carModels?.modelName || "Car Image"} style={{height: '180px', objectFit: 'cover'}} />
       <Card.Body>
         <Card.Title>{car.carBrands?.brandName} {car.carModels?.modelName}</Card.Title> {/* Display brandName and modelName */}
         <Card.Text>

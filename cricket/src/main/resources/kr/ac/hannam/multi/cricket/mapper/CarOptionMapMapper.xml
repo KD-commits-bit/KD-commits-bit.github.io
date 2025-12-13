@@ -16,4 +16,16 @@
             com.CAR_ID = #{carId}
     </select>
 
+    <insert id="insertCarOptions">
+        INSERT INTO CAR_OPTION_MAP (
+            CAR_ID,
+            OPTION_ID
+        ) VALUES (
+            #{carId},
+            #{optionId}
+        )
+    </insert>
+
+
+
 </mapper>

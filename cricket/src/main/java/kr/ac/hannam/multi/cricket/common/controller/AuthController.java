@@ -1,5 +1,7 @@
 package kr.ac.hannam.multi.cricket.common.controller;
-
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import kr.ac.hannam.multi.cricket.common.controller.dto.LoginRequest;
 import kr.ac.hannam.multi.cricket.security.auth.AdminPrincipal;
 import kr.ac.hannam.multi.cricket.security.auth.CustomUserDetailsService;
@@ -35,7 +37,7 @@ public class AuthController {
     private JWTProvider jwtProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, ServletResponse servletResponse, HttpServletResponse response) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 loginRequest.getId(),
@@ -45,6 +47,15 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.authenticationToToken(authentication);
+
+
+;       Cookie cookie = new Cookie("access_token", token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // https면 true
+        cookie.setPath("/");
+        cookie.setMaxAge(60 * 60 * 5); // 5시간
+        response.addCookie(cookie);
+
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getId());
 

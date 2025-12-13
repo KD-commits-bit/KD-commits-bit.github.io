@@ -1,5 +1,6 @@
 package kr.ac.hannam.multi.cricket.conf;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.ac.hannam.multi.cricket.filter.JwtAuthenticationFilter;
 import kr.ac.hannam.multi.cricket.security.jwt.JWTProvider;
@@ -68,6 +69,7 @@ public class SpringSecurityConfig {
                 .requestMatchers("/api/auth/login", "/api/register", "/api/register/**").permitAll()
                 .requestMatchers("/api/car/**").permitAll()
                 .requestMatchers("/api/favorites/check").permitAll()
+                .requestMatchers("/api/admin/**").hasAnyRole("ADMIN")
                 .requestMatchers("/api/auth/me").authenticated()
                 .requestMatchers("/api/**").authenticated()
                 //파일 업로드 엔드포인트 허용
@@ -80,6 +82,10 @@ public class SpringSecurityConfig {
             .logout(logout -> logout
                 .logoutUrl("/api/auth/logout")
                 .logoutSuccessHandler((request, response, authentication) -> {
+                    Cookie cookie = new Cookie("access_token", null);
+                    cookie.setPath("/");
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
                     response.setStatus(HttpServletResponse.SC_OK);
                 })
             );

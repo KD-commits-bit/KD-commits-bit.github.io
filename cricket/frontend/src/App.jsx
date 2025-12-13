@@ -11,6 +11,10 @@ import Mypage from "./pages/Mypage.jsx";
 import CarDetailPage from "./pages/CarDetailPage.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
 import {useAuth} from "./hooks/useAuth.js";
+import AdminPage from "./pages/AdminPage.jsx";
+import CarRegisterPage from "./pages/CarRegisterPage.jsx";
+import ProtectedRoute  from "./routes/ProtectedRoute.jsx";
+
 
 
 function App() {
@@ -84,6 +88,11 @@ function App() {
           </>
         }/>
         <Route path="/cars/:carId" element={<CarDetailPage user={user}/>}/>
+         {/* 관리자 페이지 */}
+       <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />}>
+        <Route path="/admin" element={<AdminPage/>}/>
+        <Route path="/admin/car/car_register" element={<CarRegisterPage/>}/>
+      </Route>
       </Routes>
     </div>
   );

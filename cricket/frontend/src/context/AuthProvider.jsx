@@ -10,6 +10,14 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const verifyUser = async () => {
       const token = localStorage.getItem("accessToken");
+
+       if (!token) {
+        setIsAuthenticated(false);
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
       if (token) {
         try {
           // apiClient has the interceptor to add the token
@@ -23,6 +31,8 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
           console.log("Token verification failed, removing token.");
           localStorage.removeItem("accessToken");
+          setIsAuthenticated(false);
+          setUser(null);
         }
       }
       setLoading(false);
@@ -49,12 +59,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  
   if (loading) {
     return <div>Loading application...</div>;
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

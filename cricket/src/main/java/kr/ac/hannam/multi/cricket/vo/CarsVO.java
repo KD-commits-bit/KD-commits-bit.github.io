@@ -15,11 +15,11 @@ public class CarsVO {
     private String carMileage;
     private String carPrice;
     private String carDescription;
-    private String carStatus;
+    private Integer carStatus;
     private String carCreatedAt;
 
     // added
-    private CarImagesVO carImages;
+    private List<CarImagesVO> carImages;
     private CarModelsVO carModels;
     private CarBrandsVO carBrands;
 }
