@@ -20,7 +20,7 @@ function CarRegisterPage() {
     carMileage: "",
     carPrice: "",
     carDescription: "",
-    carStatus: "판매중",
+    carStatus: 1,
   });
 
   // ✅ 옵션
@@ -43,7 +43,10 @@ function CarRegisterPage() {
       return;
     }
 
-    setCarForm((prev) => ({ ...prev, [name]: value }));
+     setCarForm((prev) => ({
+    ...prev,
+    [name]: name === "carStatus" ? Number(value) : value
+  }));
   };
 
   // ✅ 브랜드에 해당하는 모델만 필터
@@ -134,6 +137,10 @@ function CarRegisterPage() {
 
     setSubmitting(true);
 
+      console.log("📌 carForm =", carForm);
+  console.log("📌 selectedOptions =", selectedOptions);
+  console.log("📌 imageFiles =", imageFiles);
+
     try {
       // ✅ 백엔드 @RequestPart("data")에 들어갈 DTO 형태
       const payload = {
@@ -148,6 +155,8 @@ function CarRegisterPage() {
         optionIds: selectedOptions,
       };
 
+       console.log("📌 payload(JSON) =", payload);
+
       // ✅ multipart/form-data로 전송 (data + images)
       const formData = new FormData();
 
@@ -157,6 +166,10 @@ function CarRegisterPage() {
       // images 파트 (선택된 파일들)
       // 서버는 @RequestPart("images") List<MultipartFile> 로 받으므로 key는 반드시 "images"
       imageFiles.forEach((file) => formData.append("images", file));
+
+      for (let pair of formData.entries()) {
+    console.log("📌 formData:", pair[0], pair[1]);
+  }
 
       // 대표이미지 isPrimary는 지금 백엔드가 images만 받고 있어서
       // (서비스에서 i==0을 Y로 잡고 있음) 프론트는 순서만 맞추면 됨.
@@ -248,7 +261,7 @@ function CarRegisterPage() {
                 <div className="form-row">
                   <label>연식</label>
                   <input
-                    type="number"
+                    
                     name="carYear"
                     value={carForm.carYear}
                     onChange={handleCarChange}
@@ -259,7 +272,7 @@ function CarRegisterPage() {
                 <div className="form-row">
                   <label>주행거리 (km)</label>
                   <input
-                    type="number"
+                    
                     name="carMileage"
                     value={carForm.carMileage}
                     onChange={handleCarChange}
@@ -272,7 +285,7 @@ function CarRegisterPage() {
               <div className="form-row">
                 <label>가격 (만원)</label>
                 <input
-                  type="number"
+                  
                   name="carPrice"
                   value={carForm.carPrice}
                   onChange={handleCarChange}
@@ -284,9 +297,10 @@ function CarRegisterPage() {
               <div className="form-row">
                 <label>차량 상태</label>
                 <select name="carStatus" value={carForm.carStatus} onChange={handleCarChange}>
-                  <option value="상">상</option>
-                  <option value="중">중</option>
-                  <option value="하">하</option>
+                    <option value={1}>최상</option>
+                    <option value={2}>우수</option>
+                    <option value={3}>양호</option>
+                    <option value={4}>보통</option>
                 </select>
               </div>
 

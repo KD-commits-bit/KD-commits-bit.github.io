@@ -7,12 +7,14 @@ import kr.ac.hannam.multi.cricket.mapper.CarBrandsMapper;
 import kr.ac.hannam.multi.cricket.mapper.CarModelsMapper;
 import kr.ac.hannam.multi.cricket.mapper.CarOptionMapMapper;
 import kr.ac.hannam.multi.cricket.mapper.CarOptionsMapper;
+import kr.ac.hannam.multi.cricket.security.auth.AdminAuthUtil;
 import kr.ac.hannam.multi.cricket.security.auth.AdminPrincipal;
 import kr.ac.hannam.multi.cricket.vo.CarBrandsVO;
 import kr.ac.hannam.multi.cricket.vo.CarModelsVO;
 import kr.ac.hannam.multi.cricket.vo.CarOptionsVO;
 import kr.ac.hannam.multi.cricket.vo.CarsVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CarRegistrationServiceImpl  implements CarRegistrationService {
@@ -36,7 +38,9 @@ public class CarRegistrationServiceImpl  implements CarRegistrationService {
     public void createCarData(CarRegisterDTO data, List<MultipartFile>  images) {
 
         CarsVO car = data.getCar();
-        String adminNo = getAdminNo();
+        String adminNo = AdminAuthUtil.getAdminNo(); //여기에 로그인한 관리자의 adminNO들어감
+        log.info(adminNo);
+        car.setAdminNo(adminNo);
         if (adminNo == null) {
             throw new IllegalStateException("관리자 인증 정보가 없습니다.");
         }
@@ -89,21 +93,7 @@ public class CarRegistrationServiceImpl  implements CarRegistrationService {
 
     }
 
-    private String getAdminNo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return null;
-        }
-
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof AdminPrincipal adminPrincipal) {
-            return adminPrincipal.getAdminVO().getAdminNo();
-        }
-
-        return null;
-    }
 
     @Override
     public List<CarOptionsVO> getOptionList() {
