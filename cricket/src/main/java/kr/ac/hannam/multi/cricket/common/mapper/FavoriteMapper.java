@@ -17,11 +17,11 @@ public interface FavoriteMapper {
 
     /**
      * 찜하기 삭제
-     * @param userId 사용자 ID
+     * @param userNo 사용자 ID
      * @param carId 자동차 ID
      * @return 삭제된 행의 수
      */
-    int deleteFavorite(@Param("userId") String userId, @Param("carId") String carId);
+    int deleteFavorite(@Param("userNo") String userNo, @Param("carId") String carId);
 
     /**
      * 사용자의 찜 목록 조회
@@ -32,9 +32,9 @@ public interface FavoriteMapper {
 
     /**
      * 특정 사용자가 특정 차를 찜했는지 확인
-     * @param userId 사용자 ID
+     * @param userNo 사용자 No
      * @param carId 자동차 ID
      * @return 찜한 경우 1, 아니면 0
      */
-    int countByUserIdAndCarId(@Param("userId") String userId, @Param("carId") String carId);
+    int countByUserIdAndCarId(@Param("userNo") String userNo, @Param("carId") String carId);
 }
