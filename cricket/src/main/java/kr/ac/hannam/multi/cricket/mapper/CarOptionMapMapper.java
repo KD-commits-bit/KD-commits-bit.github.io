@@ -8,4 +8,5 @@ import java.util.Map;
 @Mapper
 public interface CarOptionMapMapper {
     List<Map<String, Object>> selectOptionListById(String carId);
+    public int insertCarOptions(String carId, String optionId);
 }

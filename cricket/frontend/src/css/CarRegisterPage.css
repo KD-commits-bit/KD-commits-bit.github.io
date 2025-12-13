@@ -1,0 +1,197 @@
+/* 전체 페이지 배경 */
+.car-reg-page {
+  background: #f5f5f8;
+  min-height: 100vh;
+  padding: 80px 0 60px;
+}
+
+/* 가운데 폼 컨테이너 */
+.car-reg-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 상단 제목 */
+.car-reg-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #111827;
+}
+
+.car-reg-header p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* 2단 레이아웃 */
+.car-reg-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr;
+  gap: 18px;
+}
+
+/* 카드 공통 스타일 */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px 22px;
+  border: 1px solid rgba(15, 30, 60, 0.06);
+  box-shadow: 0 6px 18px rgba(20, 40, 80, 0.05);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* 폼 라인 */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-row-inline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.form-row label {
+  font-size: 13px;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  padding: 8px 10px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+}
+
+/* 옵션 카드 */
+.option-card .card-title {
+  margin-bottom: 8px;
+}
+
+.option-desc {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+/* 옵션 리스트 */
+.option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  cursor: pointer;
+}
+
+.option-item input {
+  margin-top: 3px;
+}
+
+.option-texts {
+  display: flex;
+  flex-direction: column;
+}
+
+.option-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.option-category {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* 하단 버튼 영역 */
+.car-reg-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.btn-primary,
+.btn-secondary {
+  min-width: 140px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: #d81920;
+  color: #fff;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+/* 반응형 */
+@media (max-width: 960px) {
+  .car-reg-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .car-reg-container {
+    padding: 0 16px;
+  }
+
+  .form-row-inline {
+    grid-template-columns: 1fr;
+  }
+
+  .car-reg-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+}

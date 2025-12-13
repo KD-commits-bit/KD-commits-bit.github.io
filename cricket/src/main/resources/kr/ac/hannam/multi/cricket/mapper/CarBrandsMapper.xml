@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.hannam.multi.cricket.mapper.CarBrandsMapper">
+    <select id="selectAllCarBrands" resultType="kr.ac.hannam.multi.cricket.vo.CarBrandsVO">
+        SELECT
+            BRAND_ID,
+            BRAND_NAME
+        FROM CAR_BRANDS
+        ORDER BY
+            CASE SUBSTR(BRAND_ID, 1, 2)
+                WHEN 'KR' THEN 1
+                WHEN 'JP' THEN 2
+                WHEN 'US' THEN 3
+                WHEN 'DE' THEN 4
+                WHEN 'FR' THEN 5
+                WHEN 'IT' THEN 6
+                WHEN 'UK' THEN 7
+                WHEN 'CN' THEN 8
+                WHEN 'SE' THEN 9
+                ELSE 99
+                END,
+            BRAND_ID
+    </select>
+
+</mapper>
