@@ -36,15 +36,15 @@ function CarDetailPage({ user }) {
     return images.find((img) => img.isPrimary === "Y") || images[0] || null;
   }, [images]);
 
-  const STATUS_LABEL = {
+  const CONDITION_LABEL = {
   1: "최상",
   2: "우수",
   3: "양호",
   4: "보통",
 };
 
-const getStatusLabel = (status) =>
-  STATUS_LABEL [Number(status)] || "정보없음";
+const getConditionLabel = (condition) =>
+  CONDITION_LABEL [Number(condition)] || "정보없음";
 
   useEffect(() => {
     setLoading(true);
@@ -237,7 +237,7 @@ const getStatusLabel = (status) =>
                     </tr>
                     <tr>
                       <th>상태</th>
-                      <td>{getStatusLabel(car.carStatus)}</td>
+                      <td>{getConditionLabel(car.carCondition)}</td>
                     </tr>
                     <tr>
                       <th>등록일</th>

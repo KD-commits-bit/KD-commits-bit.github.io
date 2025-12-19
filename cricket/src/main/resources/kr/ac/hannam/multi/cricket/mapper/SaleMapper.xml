@@ -33,4 +33,10 @@
             , #{merchantUid}
         )
     </insert>
+
+
+    <select id="selectSalesCount" resultType="int">
+        SELECT COUNT(*)
+        FROM SALES
+    </select>
 </mapper>

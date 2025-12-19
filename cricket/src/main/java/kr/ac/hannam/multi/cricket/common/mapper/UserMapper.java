@@ -6,4 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
     public UserVO selectUser(String username);
+    public int selectUserCount();
 }

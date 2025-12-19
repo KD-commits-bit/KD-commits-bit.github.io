@@ -13,4 +13,5 @@ public interface CarsMapper {
     public CarsVO selectCarById(String carId);
     public int insertCar(CarsVO car);
     public int updateCarStatus(@Param("carId") String carId, @Param("carStatus") int carStatus);
+    public int selectCountCars();
 }

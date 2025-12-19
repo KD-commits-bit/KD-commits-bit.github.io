@@ -27,4 +27,9 @@ public class SaleServiceImpl implements SaleService {
 
         saleMapper.insertSale(salesVO);
     }
+
+    @Override
+    public int getSalesCount() {
+       return saleMapper.selectSalesCount();
+    }
 }
