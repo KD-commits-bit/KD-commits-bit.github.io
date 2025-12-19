@@ -56,7 +56,8 @@ function Login() {
 
   return (
     <div style={{padding: '50px'}}>
-      <h1 onClick={() => location.href = "/"} style={{marginBottom: '30px'}}>Logo</h1>
+      <img src={"/Logo.png"} alt={"Logo.png"} onClick={() => location.href = "/"} style={{ height: '80px', position: 'relative', top: '-5px', cursor: "pointer" }}/>
+      <br/><br/>
       <div>
         <Tabs defaultActiveKey="member" id="justify-tab-example" className="mb-3" justify>
           <Tab eventKey="member" title="회원">

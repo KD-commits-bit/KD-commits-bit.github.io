@@ -89,7 +89,7 @@ function Mypage({user}) {
                   <Col md={4} className="mb-4" key={car.carId}>
                     <div onClick={() => navigate(`/cars/${car.carId}`)} style={{ cursor: 'pointer' }}>
                       <Card>
-                        <Card.Img variant="top" src={car.carImages.carImageId} />
+                        <Card.Img variant="top" src={car.carImages?.[0]?.carImageId} className="car-card-image" />
                         <Card.Body>
                           <Card.Title>{car.carBrands.brandName} {car.carModels.modelName}</Card.Title>
                           <Card.Text>

@@ -1,6 +1,5 @@
 package kr.ac.hannam.multi.cricket.common.mapper;
 
-import kr.ac.hannam.multi.cricket.dto.CarRegisterDTO;
 import kr.ac.hannam.multi.cricket.vo.CarsVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,4 +12,5 @@ public interface CarsMapper {
     public List<CarsVO> findCarsByIds(@Param("carIds") List<String> carIds);
     public CarsVO selectCarById(String carId);
     public int insertCar(CarsVO car);
+    public int updateCarStatus(@Param("carId") String carId, @Param("carStatus") int carStatus);
 }

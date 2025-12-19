@@ -2,6 +2,7 @@ package kr.ac.hannam.multi.cricket.register.service;
 
 import kr.ac.hannam.multi.cricket.common.exception.EmailAlreadyExistsException;
 import kr.ac.hannam.multi.cricket.register.mapper.RegisterMapper;
+import kr.ac.hannam.multi.cricket.vo.UserAddressVO;
 import kr.ac.hannam.multi.cricket.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +27,11 @@ public class RegisterServiceImpl implements RegisterService {
         }
         user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
         registerMapper.insertUser(user);
+    }
+
+    @Override
+    public void createUserAddress(UserAddressVO userAddressVO) {
+        registerMapper.insertUserAddress(userAddressVO);
     }
 
     @Override
