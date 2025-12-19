@@ -14,6 +14,7 @@ import {useAuth} from "./hooks/useAuth.js";
 import AdminPage from "./pages/AdminPage.jsx";
 import CarRegisterPage from "./pages/CarRegisterPage.jsx";
 import ProtectedRoute  from "./routes/ProtectedRoute.jsx";
+import CarPurchase from "./pages/CarPurchase.jsx";
 
 
 
@@ -85,6 +86,12 @@ function App() {
           <>
             <NavbarComponent/>
             <EditProfile user={user}/>
+          </>
+        }/>
+        <Route path="/purchase/:carId" element={
+          <>
+            <NavbarComponent/>
+            <CarPurchase user={user}/>
           </>
         }/>
         <Route path="/cars/:carId" element={<CarDetailPage user={user}/>}/>

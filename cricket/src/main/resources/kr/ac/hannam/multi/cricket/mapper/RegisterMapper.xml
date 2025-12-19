@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.ac.hannam.multi.cricket.register.mapper.RegisterMapper">
     <insert id="insertUser">
+        <selectKey keyProperty="userNo" resultType="string" order="BEFORE">
+            SELECT 'user' || LPAD(user_seq.NEXTVAL, 3, '0') FROM DUAL
+        </selectKey>
+
         INSERT INTO USERS (
             USER_NO
             , USER_EMAIL
@@ -12,13 +16,38 @@
             , USER_CREATED_AT
         )
         VALUES (
-            'user' || LPAD(user_seq.NEXTVAL, 3, '0')
+            #{userNo}
             , #{userEmail}
             , #{userPassword}
             , #{userName}
             , #{userRegion}
             , #{userPhone}
             , SYSDATE
+        )
+    </insert>
+
+    <insert id="insertUserAddress">
+        INSERT INTO USER_ADDRESS (
+            USER_NO
+            , ZIPCODE
+            , SIDO
+            , SIGUNGU
+            , EUPMYUNDONG
+            , ROAD_NAME
+            , ADDRESS_LINE_1
+            , ADDRESS_LINE_2
+            , IS_DEFAULT
+        )
+        VALUES (
+            #{userNo}
+            , #{zipcode}
+            , #{sido}
+            , #{sigungu}
+            , #{eupmyundong}
+            , #{roadName}
+            , #{addressLine1}
+            , #{addressLine2}
+            , #{isDefault}
         )
     </insert>
 

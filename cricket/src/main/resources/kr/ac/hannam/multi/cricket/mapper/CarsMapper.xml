@@ -95,6 +95,7 @@
         <foreach item="item" collection="carIds" open="(" separator="," close=")">
             #{item}
         </foreach>
+        AND CI.IS_PRIMARY = 'Y'
     </select>
 
     <select id="selectCarById" resultMap="carsMap">
@@ -167,4 +168,11 @@
             TO_CHAR(SYSDATE, 'YYYY-MM-DD')
         )
     </insert>
+
+    <update id="updateCarStatus">
+        UPDATE CARS
+           SET CAR_STATUS = #{carStatus}
+         WHERE CAR_ID = #{carId}
+           AND CAR_STATUS = 0
+    </update>
 </mapper>

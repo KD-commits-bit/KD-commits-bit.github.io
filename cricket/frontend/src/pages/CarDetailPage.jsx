@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import NavbarComponent from "../components/NavbarComponent.jsx";
 import "../css/CarDetailPage.css";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import apiClient from "../api/axios.js";
 import axios from "axios";
 
@@ -19,6 +19,8 @@ function CarDetailPage({ user }) {
 
   // ✅ 현재 메인으로 보여줄 이미지 URL
   const [activeImageUrl, setActiveImageUrl] = useState("");
+
+  const navigate = useNavigate();
 
   const formatNumber = (value) => {
     if (!value && value !== 0) return "-";
@@ -85,6 +87,8 @@ const getStatusLabel = (status) =>
 
     if (!user?.no) {
       alert("로그인이 필요합니다.");
+      navigate('/login');
+
       return;
     }
 
@@ -103,6 +107,18 @@ const getStatusLabel = (status) =>
         alert("찜목록 추가를 실패했습니다. 나중에 다시 시도해주세요.");
       }
     }
+  };
+
+  const handlePurchase = () => {
+
+    if (!user?.no) {
+      alert("로그인이 필요합니다.");
+      navigate('/login');
+
+      return;
+    }
+
+    navigate(`/purchase/${car.carId}`);
   };
 
   if (loading) return <div>로딩중...</div>;
@@ -305,7 +321,7 @@ const getStatusLabel = (status) =>
                   </li>
                 </ul>
 
-                <button className="btn-main-red" type="button">
+                <button className="btn-main-red" type="button" onClick={() => handlePurchase()}>
                   홈서비스 바로구매
                 </button>
                 <button className="btn-main-outline" type="button">

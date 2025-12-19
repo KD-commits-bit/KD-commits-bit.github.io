@@ -44,7 +44,7 @@ export default function AdminPage() {
   };
 
   return (
-    <>
+    <div style={{padding: '90px'}}>
       <NavbarComponent />
 
       <main className="admin-warpper">
@@ -177,6 +177,6 @@ export default function AdminPage() {
           </ul>
         </section>
       </main>
-    </>
+    </div>
   );
 }

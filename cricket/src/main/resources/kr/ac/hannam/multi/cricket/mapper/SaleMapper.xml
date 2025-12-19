@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.hannam.multi.cricket.user.purchase.mapper.SaleMapper">
+    <insert id="insertSale" parameterType="SalesVO">
+        INSERT INTO SALES (
+            SALE_NO
+            , CAR_ID
+            , ADMIN_NO
+            , USER_NO
+            , SALE_PRICE
+            , SALE_DATE
+            , ZIPCODE
+            , ADDRESS_LINE1
+            , ADDRESS_LINE2
+            , RECIPIENT_NAME
+            , RECIPIENT_PHONE
+            , IMP_UID
+            , MERCHANT_UID
+        )
+        VALUES (
+            'SALE' || LPAD(sale_seq.NEXTVAL, 5, '0')
+            ,#{carId}
+            , #{adminNo}
+            , #{userNo}
+            , #{salePrice}
+            , SYSDATE
+            , #{zipcode}
+            , #{addressLine1}
+            , #{addressLine2}
+            , #{recipientName}
+            , #{recipientPhone}
+            , #{impUid}
+            , #{merchantUid}
+        )
+    </insert>
+</mapper>
