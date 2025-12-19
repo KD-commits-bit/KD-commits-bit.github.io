@@ -17,4 +17,11 @@ public class CarsServiceImpl implements  CarsService {
 
         return carsMapper.selectAllCars();
     }
+
+    @Override
+    public int getCountCars() {
+        return carsMapper.selectCountCars();
+    }
+
+
 }

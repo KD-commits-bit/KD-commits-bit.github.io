@@ -31,6 +31,7 @@
         <result property="carDescription" column="C_CAR_DESCRIPTION"/>
         <result property="carStatus" column="C_CAR_STATUS"/>
         <result property="carCreatedAt" column="C_CAR_CREATED_AT"/>
+        <result property="carCondition" column="C_CAR_CONDITION"/>
         <association property="carModels" resultMap="carModelMap"/>
         <association property="carBrands" resultMap="carBrandMap"/>
 
@@ -79,6 +80,7 @@
              , C.CAR_DESCRIPTION AS C_CAR_DESCRIPTION
              , C.CAR_STATUS AS C_CAR_STATUS
              , C.CAR_CREATED_AT AS C_CAR_CREATED_AT
+             , C.CAR_CONDITION AS C_CAR_CONDITION
              , CI.CAR_IMAGE_ID AS CI_CAR_IMAGE_ID
              , CI.CAR_ID AS CI_CAR_ID
              , CI.IS_PRIMARY AS CI_IS_PRIMARY
@@ -108,6 +110,7 @@
              , C.CAR_DESCRIPTION AS C_CAR_DESCRIPTION
              , C.CAR_STATUS AS C_CAR_STATUS
              , C.CAR_CREATED_AT AS C_CAR_CREATED_AT
+             , C.CAR_CONDITION AS C_CAR_CONDITION
              , CI.CAR_IMAGE_ID AS CI_CAR_IMAGE_ID
              , CI.CAR_ID AS CI_CAR_ID
              , CI.IS_PRIMARY AS CI_IS_PRIMARY
@@ -122,6 +125,11 @@
                  LEFT JOIN CAR_BRANDS CB ON CM.BRAND_ID = CB.BRAND_ID
         WHERE C.CAR_ID = #{carId}
         ORDER BY CASE WHEN CI.IS_PRIMARY = 'Y' THEN 0 ELSE 1 END, CI.CAR_IMAGE_ID
+    </select>
+    
+    <select id="selectCountCars" resultType="int">
+        SELECT COUNT(*) AS CAR_COUNT
+        FROM CARS
     </select>
 
 
@@ -155,7 +163,8 @@
             CAR_PRICE,
             CAR_DESCRIPTION,
             CAR_STATUS,
-            CAR_CREATED_AT
+            CAR_CREATED_AT,
+            CAR_CONDITION
         ) VALUES (
             #{carId},
             #{modelId},
@@ -164,8 +173,9 @@
             #{carMileage},
             #{carPrice},
             #{carDescription},
-            #{carStatus},
-            TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+            0,
+            TO_CHAR(SYSDATE, 'YYYY-MM-DD'),
+            #{carCondition}
         )
     </insert>
 

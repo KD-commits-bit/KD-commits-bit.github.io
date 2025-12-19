@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarComponent from "../components/NavbarComponent";
+import appClient from "../api/axios";
 import "../css/AdminPage.css";
+import apiClient from "../api/axios";
 
 
 
@@ -30,6 +32,18 @@ function StatCard({ icon, title, value, delta }) {
 export default function AdminPage() {
 
    const navigate = useNavigate();
+   const [totalCars, setTotalCars] = useState(0);
+
+   useEffect(()=> {
+    apiClient
+      .get("/api/car/count")
+      .then(res => {
+        setTotalCars(res.data);
+      })
+      .catch(err => {
+        console.error("차량 수 조회 실패", err);
+      })
+   }, []);
 
   const handleGoToCarRegister = () => {
     navigate("/admin/car/car_register");
@@ -66,7 +80,7 @@ export default function AdminPage() {
               </svg>
             }
             title="등록된 차량 수"
-            value={stats.totalCars.toLocaleString()}
+            value={totalCars.toLocaleString()}
             delta={+2.5}
           />
 
@@ -90,7 +104,7 @@ export default function AdminPage() {
                 <path d="M7 12h10" stroke="#ff3b7a" strokeWidth="1.6" />
               </svg>
             }
-            title="오늘 신규 가입자"
+            title="전체 가입자 수"
             value={stats.newUsersToday}
             delta={-1.2}
           />
@@ -102,7 +116,7 @@ export default function AdminPage() {
                 <path d="M12 8v8" stroke="#22a552" strokeWidth="1.5" />
               </svg>
             }
-            title="승인 대기"
+            title="오늘 가입자 수"
             value={stats.pendingApprovals}
             delta={+0.0}
           />

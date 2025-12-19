@@ -20,7 +20,7 @@ function CarRegisterPage() {
     carMileage: "",
     carPrice: "",
     carDescription: "",
-    carStatus: 1,
+    carCondition: 1,
   });
 
   // ✅ 옵션
@@ -45,7 +45,7 @@ function CarRegisterPage() {
 
      setCarForm((prev) => ({
     ...prev,
-    [name]: name === "carStatus" ? Number(value) : value
+    [name]: name === "carCondition" ? Number(value) : value
   }));
   };
 
@@ -150,7 +150,7 @@ function CarRegisterPage() {
           carMileage: carForm.carMileage,
           carPrice: carForm.carPrice,
           carDescription: carForm.carDescription,
-          carStatus: carForm.carStatus,
+          carCondition: carForm.carCondition,
         },
         optionIds: selectedOptions,
       };
@@ -296,7 +296,7 @@ function CarRegisterPage() {
 
               <div className="form-row">
                 <label>차량 상태</label>
-                <select name="carStatus" value={carForm.carStatus} onChange={handleCarChange}>
+                <select name="carCondition" value={carForm.carCondition} onChange={handleCarChange}>
                     <option value={1}>최상</option>
                     <option value={2}>우수</option>
                     <option value={3}>양호</option>

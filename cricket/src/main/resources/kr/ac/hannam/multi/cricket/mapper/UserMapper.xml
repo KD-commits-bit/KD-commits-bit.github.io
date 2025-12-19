@@ -13,4 +13,9 @@
           FROM USERS
          WHERE USER_EMAIL=#{username}
     </select>
+
+    <select id="selectUserCount" resultType="int">
+            SELECT COUNT(*)
+            FROM USERS
+    </select>
 </mapper>

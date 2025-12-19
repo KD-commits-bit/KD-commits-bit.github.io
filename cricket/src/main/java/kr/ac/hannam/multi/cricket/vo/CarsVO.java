@@ -17,6 +17,7 @@ public class CarsVO {
     private String carDescription;
     private Integer carStatus;
     private String carCreatedAt;
+    private Integer carCondition;
 
     // added
     private List<CarImagesVO> carImages;
