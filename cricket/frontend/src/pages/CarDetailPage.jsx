@@ -1,13 +1,13 @@
 // src/pages/CarDetailPage.jsx
-import React, { useEffect, useState, useMemo } from "react";
+import React, {useEffect, useState, useMemo} from "react";
 import NavbarComponent from "../components/NavbarComponent.jsx";
 import "../css/CarDetailPage.css";
 import {useNavigate, useParams} from "react-router-dom";
 import apiClient from "../api/axios.js";
 import axios from "axios";
 
-function CarDetailPage({ user }) {
-  const { carId } = useParams();
+function CarDetailPage({user}) {
+  const {carId} = useParams();
 
   const [car, setCar] = useState(null);
   const [option, setOption] = useState(null);
@@ -37,14 +37,47 @@ function CarDetailPage({ user }) {
   }, [images]);
 
   const CONDITION_LABEL = {
-  1: "최상",
-  2: "우수",
-  3: "양호",
-  4: "보통",
-};
+    1: "최상",
+    2: "우수",
+    3: "양호",
+    4: "보통",
+  };
 
-const getConditionLabel = (condition) =>
-  CONDITION_LABEL [Number(condition)] || "정보없음";
+  useEffect(() => {
+    // 차량 데이터가 로드되었을 때만 실행
+    if (car) {
+      const saveRecentCar = () => {
+        // 1. 기존 목록 가져오기 (없으면 빈 배열)
+        const recentCars = JSON.parse(localStorage.getItem("recentCars")) || [];
+
+        // 2. 현재 보려는 차량 객체 생성 (마이페이지에서 보여줄 최소 정보)
+        const currentCar = {
+          carId: car.carId,
+          brandName: car.carBrands?.brandName,
+          modelName: car.carModels?.modelName,
+          carYear: car.carYear,
+          carMileage: car.carMileage,
+          carPrice: car.carPrice,
+          // 대표 이미지 주소 저장
+          image: car.carImages?.find(img => img.isPrimary === 'Y')?.carImageId || car.carImages?.[0]?.carImageId
+        };
+
+        // 3. 중복 제거: 이미 목록에 있는 차량이면 삭제 (나중에 맨 앞에 넣기 위함)
+        const filteredCars = recentCars.filter((item) => item.carId !== car.carId);
+
+        // 4. 새로운 차량을 맨 앞에 추가하고 최대 5개까지만 유지
+        const updatedCars = [currentCar, ...filteredCars].slice(0, 5);
+
+        // 5. 로컬스토리지 저장
+        localStorage.setItem("recentCars", JSON.stringify(updatedCars));
+      };
+
+      saveRecentCar();
+    }
+  }, [car]);
+
+  const getConditionLabel = (condition) =>
+    CONDITION_LABEL [Number(condition)] || "정보없음";
 
   useEffect(() => {
     setLoading(true);
@@ -58,9 +91,9 @@ const getConditionLabel = (condition) =>
     // ✅ user가 없으면 체크 요청은 스킵
     const favoriteCheckReq = user?.no
       ? axios.get(
-          `http://localhost:8080/api/favorites/check?userNo=${user.no}&carId=${carId}`
-        )
-      : Promise.resolve({ data: false });
+        `http://localhost:8080/api/favorites/check?userNo=${user.no}&carId=${carId}`
+      )
+      : Promise.resolve({data: false});
 
     Promise.all([carReq, optionReq, favoriteCheckReq])
       .then(([carRes, optionRes, favRes]) => {
@@ -93,7 +126,7 @@ const getConditionLabel = (condition) =>
     }
 
     try {
-      const payload = { carId: car?.carId, userNo: user.no };
+      const payload = {carId: car?.carId, userNo: user.no};
 
       await apiClient.post("http://localhost:8080/api/favorites", payload);
 
@@ -127,10 +160,10 @@ const getConditionLabel = (condition) =>
 
   return (
     <>
-      <NavbarComponent />
+      <NavbarComponent/>
 
       {/* KCar 처럼 회색 배경 + 가운데 카드 */}
-      <div className="detail-page" style={{ padding: "40px" }}>
+      <div className="detail-page" style={{padding: "40px"}}>
         <div className="detail-container">
           {/* 상단 제목 */}
           <div className="detail-header">
@@ -147,9 +180,9 @@ const getConditionLabel = (condition) =>
           <div className="detail-hero">
             <div className="hero-image-wrap">
               {activeImageUrl ? (
-                <img src={activeImageUrl} alt="car" />
+                <img src={activeImageUrl} alt="car"/>
               ) : (
-                <div style={{ padding: 20 }}>이미지 없음</div>
+                <div style={{padding: 20}}>이미지 없음</div>
               )}
             </div>
 
@@ -219,30 +252,30 @@ const getConditionLabel = (condition) =>
                 <h2>차량 기본 정보</h2>
                 <table className="info-table">
                   <tbody>
-                    <tr>
-                      <th>연식</th>
-                      <td>{car.carYear}</td>
-                    </tr>
-                    <tr>
-                      <th>주행거리</th>
-                      <td>{formatNumber(car.carMileage)} km</td>
-                    </tr>
-                    <tr>
-                      <th>모델명</th>
-                      <td>{car.carModels?.modelName}</td>
-                    </tr>
-                    <tr>
-                      <th>브랜드</th>
-                      <td>{car.carBrands?.brandName}</td>
-                    </tr>
-                    <tr>
-                      <th>상태</th>
-                      <td>{getConditionLabel(car.carCondition)}</td>
-                    </tr>
-                    <tr>
-                      <th>등록일</th>
-                      <td>{car.carCreatedAt}</td>
-                    </tr>
+                  <tr>
+                    <th>연식</th>
+                    <td>{car.carYear}</td>
+                  </tr>
+                  <tr>
+                    <th>주행거리</th>
+                    <td>{formatNumber(car.carMileage)} km</td>
+                  </tr>
+                  <tr>
+                    <th>모델명</th>
+                    <td>{car.carModels?.modelName}</td>
+                  </tr>
+                  <tr>
+                    <th>브랜드</th>
+                    <td>{car.carBrands?.brandName}</td>
+                  </tr>
+                  <tr>
+                    <th>상태</th>
+                    <td>{getConditionLabel(car.carCondition)}</td>
+                  </tr>
+                  <tr>
+                    <th>등록일</th>
+                    <td>{car.carCreatedAt}</td>
+                  </tr>
                   </tbody>
                 </table>
               </section>

@@ -355,6 +355,19 @@
     color: red; /* Make the heart icon red when favorited */
 }
 
+.section {
+    scroll-margin-top: 100px;
+}
+
+/* 마우스 올렸을 때 클릭 가능하다는 느낌 주기 */
+.summary-item {
+    transition: background-color 0.2s;
+}
+.summary-item:hover {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
 
 /* =========================
    반응형
