@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.hannam.multi.cricket.mapper.CarOptionMapMapper">
+    <select id="selectOptionListById" resultType="HashMap">
+        SELECT
+            com.OPTION_ID,
+            co.OPTION_NAME,
+            co.OPTION_CATEGORY
+        FROM
+            CAR_OPTION_MAP com
+                JOIN
+            CAR_OPTIONS co
+            ON
+                com.OPTION_ID = co.OPTION_ID
+        WHERE
+            com.CAR_ID = #{carId}
+    </select>
+
+    <insert id="insertCarOptions">
+        INSERT INTO CAR_OPTION_MAP (
+            CAR_ID,
+            OPTION_ID
+        ) VALUES (
+            #{carId},
+            #{optionId}
+        )
+    </insert>
+
+
+
+</mapper>

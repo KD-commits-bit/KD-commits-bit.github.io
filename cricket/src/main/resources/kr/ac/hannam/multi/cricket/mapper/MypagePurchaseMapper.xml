@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.hannam.multi.cricket.common.mapper.MypagePurchaseMapper">
+    <resultMap id="salesResultMap" type="kr.ac.hannam.multi.cricket.vo.SalesVO">
+        <id property="saleNo" column="SALE_NO"/>
+        <result property="carId" column="CAR_ID"/>
+        <result property="userNo" column="USER_NO"/>
+        <result property="salePrice" column="SALE_PRICE"/>
+        <result property="saleDate" column="SALE_DATE"/>
+        <result property="impUid" column="IMP_UID"/>
+        <result property="merchantUid" column="MERCHANT_UID"/>
+
+        <association property="carImages" javaType="kr.ac.hannam.multi.cricket.vo.CarImagesVO">
+            <id property="carImageId" column="CAR_IMAGE_ID"/>
+            <result property="isPrimary" column="IS_PRIMARY"/>
+        </association>
+
+        <collection property="cars" ofType="kr.ac.hannam.multi.cricket.vo.CarsVO">
+            <id property="carId" column="CAR_ID"/>
+            <result property="carYear" column="CAR_YEAR"/>
+            <result property="carMileage" column="CAR_MILEAGE"/>
+            <result property="carPrice" column="CAR_PRICE"/>
+            <result property="modelId" column="MODEL_ID"/>
+            <result property="carDescription" column="CAR_DESCRIPTION"/>
+
+            <association property="carModels" javaType="kr.ac.hannam.multi.cricket.vo.CarModelsVO">
+                <id property="modelId" column="MODEL_ID"/>
+                <result property="modelName" column="MODEL_NAME"/>
+            </association>
+
+            <association property="carBrands" javaType="kr.ac.hannam.multi.cricket.vo.CarBrandsVO">
+                <result property="brandName" column="BRAND_NAME"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <select id="selectPurchaseList" resultMap="salesResultMap">
+        SELECT A.SALE_NO
+             , A.CAR_ID
+             , A.ADMIN_NO
+             , A.USER_NO
+             , A.SALE_PRICE
+             , TO_CHAR(TO_DATE(A.SALE_DATE, 'YY/MM/DD'), 'YYYY-MM-DD') AS SALE_DATE
+             , A.ZIPCODE
+             , A.ADDRESS_LINE1
+             , A.ADDRESS_LINE2
+             , A.RECIPIENT_NAME
+             , A.RECIPIENT_PHONE
+             , A.MERCHANT_UID
+             , A.IMP_UID
+             , B.CAR_IMAGE_ID
+             , B.IS_PRIMARY
+             , C.MODEL_ID
+             , C.ADMIN_NO
+             , C.CAR_YEAR
+             , C.CAR_MILEAGE
+             , C.CAR_PRICE
+             , C.CAR_DESCRIPTION
+             , C.CAR_STATUS
+             , C.CAR_CREATED_AT
+             , C.CAR_CONDITION
+             , D.MODEL_NAME
+             , E.BRAND_NAME
+        FROM SALES A
+                 INNER JOIN CAR_IMAGES B ON A.CAR_ID=B.CAR_ID
+                 INNER JOIN CARS C ON C.CAR_ID=B.CAR_ID
+                 INNER JOIN CAR_MODELS D ON C.MODEL_ID=D.MODEL_ID
+                 INNER JOIN CAR_BRANDS E ON D.BRAND_ID=E.BRAND_ID
+        WHERE USER_NO=#{userNo}
+          AND B.IS_PRIMARY='Y'
+    </select>
+</mapper>

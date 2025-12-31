@@ -1,0 +1,26 @@
+.carousel-img {
+    width: 100%;
+    border-radius: 0;
+    transition: transform 0.3s ease;
+}
+
+.carousel-img:hover {
+    transform: scale(1.03);
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .carousel-img {
+        max-height: 300px;
+    }
+    .carousel-container {
+        width: 100%;
+    }
+}
+
+/* 아주 작은 화면 */
+@media (max-width: 480px) {
+    .carousel-img {
+        max-height: 200px;
+    }
+}

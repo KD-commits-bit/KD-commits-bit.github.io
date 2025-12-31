@@ -1,0 +1,214 @@
+.purchase-container {
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+
+.purchase-title {
+    font-weight: 700;
+}
+
+.purchase-sub {
+    color: #888;
+    margin-bottom: 30px;
+}
+
+.step-card {
+    background: #f8f9fa;
+    border: none;
+    padding: 20px;
+}
+
+.step-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #999;
+    font-size: 14px;
+}
+
+.step-item.active {
+    color: #c40000;
+    font-weight: 600;
+}
+
+.step-circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+}
+
+.step-item.active .step-circle {
+    border-color: #c40000;
+    color: #c40000;
+}
+
+.description {
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.car-preview {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.summary-card {
+    position: sticky;
+    top: 100px;
+    border-radius: 12px;
+}
+
+.step-count {
+    font-size: 13px;
+    color: #666;
+    text-align: right;
+}
+
+.car-summary-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.car-summary-sub {
+    color: #777;
+    font-size: 14px;
+}
+
+.summary-box-wrapper {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.summary-box {
+    flex: 1;
+    height: 90px;
+    border: 1px solid #7e7e7e;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    color: #7e7e7e;
+    background-color: #fff;
+    transition: all 0.2s ease;
+}
+
+.summary-box:hover {
+    border-color: #c40000;
+    color: #c40000;
+    background-color: #fff5f5;
+}
+
+.next-btn {
+    padding: 18px 144px;
+    font-size: 16px;
+    border-radius: 14px;
+    font-weight: 500;
+    background-color: #c40000;
+    border: none;
+}
+
+.next-btn:hover {
+    background-color: #a80000;
+}
+
+.prev-btn {
+    padding: 18px 40px; /* 이전 버튼은 다음 버튼보다 가로 폭을 좁게 설정하는 편입니다 */
+    font-size: 16px;
+    border-radius: 14px;
+    font-weight: 500;
+    background-color: #f1f3f5; /* 연한 회색 배경 */
+    color: #495057;           /* 진한 회색 글자 */
+    border: 1px solid #dee2e6;
+    transition: all 0.2s ease;
+    margin-right: 12px;       /* 다음 버튼과의 간격 */
+}
+
+.prev-btn:hover {
+    background-color: #e9ecef;
+    color: #212529;
+    border-color: #ced4da;
+}
+
+/* 모달 헤더 디자인 */
+.custom-modal-header {
+    border-bottom: 2px solid #f1f1f1;
+    background-color: #fff;
+}
+
+.modal-title-main {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #222;
+}
+
+/* 옵션 카테고리 섹션 */
+.option-section {
+    margin-bottom: 2rem;
+}
+
+.option-category-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #e8344e; /* 포인트 컬러 */
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.option-category-title::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background-color: #e8344e;
+    margin-right: 8px;
+    border-radius: 2px;
+}
+
+/* 옵션 아이템 그리드 */
+.option-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.option-pill {
+    background-color: #f8f9fa;
+    border: 1px solid #eee;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #555;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.option-pill:hover {
+    background-color: #fff1f2;
+    border-color: #ffb8bf;
+    color: #e8344e;
+}
+
+/* 모달 푸터 안내문 */
+.modal-info-box {
+    background-color: #fcfcfc;
+    border-top: 1px solid #f1f1f1;
+    padding: 20px;
+    width: 100%;
+}
