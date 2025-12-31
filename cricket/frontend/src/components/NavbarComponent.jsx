@@ -3,7 +3,7 @@ import { Button, Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstr
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
-function NavbarComponent() {
+function NavbarComponent({ onSearchClick }) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const isAuthenticated = !!user;
@@ -56,7 +56,18 @@ function NavbarComponent() {
           {/* 중앙 메뉴 */}
           <Nav className="ms-4 my-2 my-lg-0" style={{ gap: "15px" }}>
             <Nav.Link onClick={() => navigate('/')} className="fw-semibold">홈</Nav.Link>
-            <Nav.Link onClick={() => navigate('/cars')} className="fw-semibold">차량검색</Nav.Link>
+            <Nav.Link
+              onClick={() => {
+                if (window.location.pathname === '/') {
+                  onSearchClick(); // 홈 경로일 때는 스크롤 이동
+                } else {
+                  navigate('/'); // 홈이 아닐 때는 홈으로 이동 (이후 스크롤 처리는 추가 로직 필요)
+                }
+              }}
+              className="fw-semibold"
+            >
+              차량검색
+            </Nav.Link>
             <NavDropdown title="서비스 안내" id="navbarScrollingDropdown" className="fw-semibold">
               <NavDropdown.Item href="#action3">이용 방법</NavDropdown.Item>
               <NavDropdown.Item href="#action4">예약 조회</NavDropdown.Item>

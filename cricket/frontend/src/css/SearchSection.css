@@ -1,0 +1,9 @@
+.hover-text:hover {
+    color: #3677a6 !important;
+    transition: color 0.2s ease;
+}
+
+.form-select:focus {
+    border-color: #3677a6 !important;
+    box-shadow: 0 0 0 0.25rem rgba(54, 119, 166, 0.25) !important;
+}
