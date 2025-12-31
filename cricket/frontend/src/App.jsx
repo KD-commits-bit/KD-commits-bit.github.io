@@ -6,7 +6,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import CarouselComponent from "./components/CarouselComponent.jsx";
 import axios from "axios";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import Mypage from "./pages/Mypage.jsx";
 import CarDetailPage from "./pages/CarDetailPage.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
@@ -15,6 +15,9 @@ import AdminPage from "./pages/AdminPage.jsx";
 import CarRegisterPage from "./pages/CarRegisterPage.jsx";
 import ProtectedRoute  from "./routes/ProtectedRoute.jsx";
 import CarPurchase from "./pages/CarPurchase.jsx";
+import SearchSection from "./components/SearchSection.jsx";
+import "./App.css"
+import {Button, Col, Container, Row} from "react-bootstrap";
 
 
 
@@ -23,6 +26,8 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const {user} = useAuth();
+
+  const searchSectionRef = useRef(null);
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/car/all")
@@ -45,32 +50,43 @@ function App() {
     return <div>Error: {error.message}</div>;
   }
 
+  const handleScrollToSearch = () => {
+    searchSectionRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
+
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={
           <>
-            <NavbarComponent/>
+            <NavbarComponent onSearchClick={handleScrollToSearch}/>
             <header className="App-header" style={{textAlign: "center", paddingTop: '80px', marginBottom: "50px"}}>
-              <CarouselComponent/>
+              <CarouselComponent onScrollDown={handleScrollToSearch}/>
             </header>
 
-            <section
-              style={{
-                minHeight: "100vh",
-                backgroundColor: "#f9f9f9",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexWrap: "wrap",
-                width: "80%",
-                margin: "0 auto",
-                paddingBottom: "100px",
-              }}
-            >
-              {cars.map((car) => (
-                <CardComponent key={car.carId} car={car}/>
-              ))}
+            <SearchSection ref={searchSectionRef}/>
+
+            <section style={{ padding: "100px 0", backgroundColor: "#fcfcfc" }}>
+              <Container>
+                <div className="d-flex justify-content-between align-items-end mb-5">
+                  <div>
+                    <h3 className="fw-bold mb-1">지금 바로 구매 가능한 차량</h3>
+                    <p className="text-muted">엄격한 기준을 통과한 무사고 차량들입니다.</p>
+                  </div>
+                  <Button variant="outline-secondary" className="rounded-pill px-4">전체보기</Button>
+                </div>
+
+                <Row className="g-4">
+                  {cars.map((car) => (
+                    <Col key={car.carId} lg={3} md={4} sm={6}>
+                      <CardComponent car={car}/>
+                    </Col>
+                  ))}
+                </Row>
+              </Container>
             </section>
           </>
         }/>

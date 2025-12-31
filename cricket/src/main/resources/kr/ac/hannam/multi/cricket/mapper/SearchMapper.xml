@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ac.hannam.multi.cricket.search.mapper.SearchMapper">
+    <select id="selectCarBrandsList">
+        SELECT BRAND_ID
+               , BRAND_NAME
+          FROM CAR_BRANDS
+    </select>
+    <select id="selectCarModelsList" parameterType="String">
+        SELECT MODEL_ID
+               , BRAND_ID
+               , MODEL_NAME
+          FROM CAR_MODELS
+         WHERE BRAND_ID=#{brandId}
+    </select>
+</mapper>
