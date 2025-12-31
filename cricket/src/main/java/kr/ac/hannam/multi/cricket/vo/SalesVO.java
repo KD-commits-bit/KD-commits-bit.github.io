@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 @Data
 @EqualsAndHashCode(of = "saleNo")
 public class SalesVO {
@@ -24,4 +26,10 @@ public class SalesVO {
     private String addressLine2;
     private String recipientName;
     private String recipientPhone;
+
+    // added
+    private CarImagesVO carImages;
+    private List<CarsVO> cars;
+    private CarModelsVO carModels;
+    private CarBrandsVO carBrands;
 }
