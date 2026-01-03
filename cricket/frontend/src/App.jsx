@@ -18,6 +18,7 @@ import CarPurchase from "./pages/CarPurchase.jsx";
 import SearchSection from "./components/SearchSection.jsx";
 import "./App.css"
 import {Button, Col, Container, Row} from "react-bootstrap";
+import AdminCarListPage from "./pages/AdminCarListPage.jsx";
 
 
 
@@ -115,6 +116,7 @@ function App() {
        <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />}>
         <Route path="/admin" element={<AdminPage/>}/>
         <Route path="/admin/car/car_register" element={<CarRegisterPage/>}/>
+        <Route path="/admin/car/list" element={<AdminCarListPage/>} />
       </Route>
       </Routes>
     </div>
