@@ -31,5 +31,10 @@ public class adminStatisticsController {
         return userService.getUserCount();
     }
 
+    @GetMapping("/count_user/today")
+    public int getUsersTodayCount() {
+        return userService.getTodayUserCount();
+    }
+
 
 }
