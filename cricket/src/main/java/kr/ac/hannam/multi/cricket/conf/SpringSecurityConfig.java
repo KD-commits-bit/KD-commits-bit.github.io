@@ -68,6 +68,7 @@ public class SpringSecurityConfig {
                 .requestMatchers("/", "/index.html", "/static/**", "/assets/**", "/vite.svg", "/manifest.json").permitAll()
                 .requestMatchers("/api/auth/login", "/api/register", "/api/register/**").permitAll()
                 .requestMatchers("/api/car/**").permitAll()
+                .requestMatchers("/api/search/**").permitAll()
                 .requestMatchers("/api/favorites/check").permitAll()
                 .requestMatchers("/api/purchase/**").permitAll()
                 .requestMatchers("/api/admin/**").hasAnyRole("ADMIN")
