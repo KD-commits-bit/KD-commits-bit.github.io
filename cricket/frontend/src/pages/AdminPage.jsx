@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarComponent from "../components/NavbarComponent";
-import apiClient from "../api/axios";
+import appClient from "../api/axios";
 import "../css/AdminPage.css";
-
+import apiClient from "../api/axios";
 
 
 
@@ -32,40 +32,30 @@ function StatCard({ icon, title, value, delta }) {
 export default function AdminPage() {
 
    const navigate = useNavigate();
-   
-   const [stats, setStats] = useState({
-    totalCars : 0,
-    totalSales : 0,
-    totalUsers: 0,
-    todayUsers: 0
-   })
+   const [totalCars, setTotalCars] = useState(0);
 
    useEffect(()=> {
-    Promise.all([
-       apiClient.get("/api/statistics/count_car"),
-       apiClient.get("/api/statistics/count_sales"),
-       apiClient.get("/api/statistics/count_user"),
-       apiClient.get("/api/statistics/count_user/today"),
-    ])
-    .then(([carRes, saleRes, userRes, todayUserRes]) => {
-      setStats({
-        totalCars : carRes.data,
-        totalSales: saleRes.data,
-        totalUsers: userRes.data,
-        todayUsers: todayUserRes.data
-      });
-    })
+    apiClient
+      .get("/api/car/count")
+      .then(res => {
+        setTotalCars(res.data);
+      })
       .catch(err => {
-        console.error("통계 조회 실패", err);
+        console.error("차량 수 조회 실패", err);
       })
    }, []);
 
   const handleGoToCarRegister = () => {
     navigate("/admin/car/car_register");
   }
-  const handleGoToCarList = () => {
-    navigate("/admin/car/list");
-  }
+
+  // 예시 더미값 (나중에 API로 치환)
+  const stats = {
+    totalCars: 1243,
+    totalSales: 4520,
+    newUsersToday: 18,
+    pendingApprovals: 3,
+  };
 
   return (
     <div style={{padding: '90px'}}>
@@ -90,7 +80,7 @@ export default function AdminPage() {
               </svg>
             }
             title="등록된 차량 수"
-            value={stats.totalCars.toLocaleString()}
+            value={totalCars.toLocaleString()}
             delta={+2.5}
           />
 
@@ -115,7 +105,7 @@ export default function AdminPage() {
               </svg>
             }
             title="전체 가입자 수"
-            value={stats.totalUsers}
+            value={stats.newUsersToday}
             delta={-1.2}
           />
 
@@ -127,7 +117,7 @@ export default function AdminPage() {
               </svg>
             }
             title="오늘 가입자 수"
-            value={stats.todayUsers}
+            value={stats.pendingApprovals}
             delta={+0.0}
           />
         </section>
@@ -144,7 +134,7 @@ export default function AdminPage() {
               <button className="admin-btn primary" onClick={handleGoToCarRegister}>
                 차량 등록하기
               </button>
-              <button className="admin-btn" onClick={handleGoToCarList}>
+              <button className="admin-btn">
                 차량 목록 보기
               </button>
               <button className="admin-btn">

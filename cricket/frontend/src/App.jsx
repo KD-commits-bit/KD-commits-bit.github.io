@@ -15,7 +15,6 @@ import AdminPage from "./pages/AdminPage.jsx";
 import CarRegisterPage from "./pages/CarRegisterPage.jsx";
 import ProtectedRoute  from "./routes/ProtectedRoute.jsx";
 import CarPurchase from "./pages/CarPurchase.jsx";
-import AdminCarListPage from "./pages/AdminCarListPage.jsx";
 
 
 
@@ -100,7 +99,6 @@ function App() {
        <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />}>
         <Route path="/admin" element={<AdminPage/>}/>
         <Route path="/admin/car/car_register" element={<CarRegisterPage/>}/>
-        <Route path="/admin/car/list" element={<AdminCarListPage/>} />
       </Route>
       </Routes>
     </div>
