@@ -3,12 +3,10 @@ package kr.ac.hannam.multi.cricket.search.controller;
 import kr.ac.hannam.multi.cricket.search.service.SearchService;
 import kr.ac.hannam.multi.cricket.vo.CarBrandsVO;
 import kr.ac.hannam.multi.cricket.vo.CarModelsVO;
+import kr.ac.hannam.multi.cricket.vo.CarsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +15,13 @@ import java.util.List;
 public class SearchController {
     @Autowired
     private SearchService searchService;
+
+    @GetMapping("{modelId}")
+    public ResponseEntity<List<CarsVO>> selectSearchedCarList(@PathVariable String modelId){
+        List<CarsVO> searchedCarList = searchService.readSearchedCarList(modelId);
+
+        return ResponseEntity.ok(searchedCarList);
+    }
 
     @GetMapping("brandList")
     public ResponseEntity<List<CarBrandsVO>> selectCarBrandsList() {
@@ -30,5 +35,18 @@ public class SearchController {
         List<CarModelsVO> carModelsList = searchService.readCarModelsList(brandId);
 
         return ResponseEntity.ok(carModelsList);
+    }
+
+    @GetMapping("budget")
+    public ResponseEntity<List<CarsVO>> selectCarListByBudget(
+            @RequestParam int minPrice,
+            @RequestParam int maxPrice,
+            @RequestParam(required = false) String brandId) {
+        System.out.println("minPrice === " + minPrice);
+        System.out.println("maxPrice === " + maxPrice);
+        System.out.println("brandId === " + brandId);
+
+        List<CarsVO> list = searchService.readCarListByBudget(minPrice, maxPrice, brandId);
+        return ResponseEntity.ok(list);
     }
 }

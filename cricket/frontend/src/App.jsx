@@ -28,9 +28,14 @@ function App() {
   const {user} = useAuth();
 
   const searchSectionRef = useRef(null);
+  const resultSectionRef = useRef(null);
 
-  useEffect(() => {
-    axios.get("http://localhost:8080/api/car/all")
+  const fetchAllCars = (showLoadingScreen = true) => {
+    if (showLoadingScreen) {
+      setLoading(true);
+    }
+
+    axios.get("/api/car/all")
       .then((response) => {
         setCars(response.data);
         setLoading(false);
@@ -40,7 +45,15 @@ function App() {
         setError(e);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchAllCars(true);
   }, []);
+
+  const handleShowAll = () => {
+    fetchAllCars(false);
+  };
 
   if (loading) {
     return <div>로딩중...</div>;
@@ -67,24 +80,30 @@ function App() {
               <CarouselComponent onScrollDown={handleScrollToSearch}/>
             </header>
 
-            <SearchSection ref={searchSectionRef}/>
+            <SearchSection ref={searchSectionRef} setCars={setCars} resultSectionRef={resultSectionRef}/>
 
-            <section style={{ padding: "100px 0", backgroundColor: "#fcfcfc" }}>
+            <section ref={resultSectionRef} style={{ padding: "100px 0", backgroundColor: "#fcfcfc" }}>
               <Container>
                 <div className="d-flex justify-content-between align-items-end mb-5">
                   <div>
                     <h3 className="fw-bold mb-1">지금 바로 구매 가능한 차량</h3>
                     <p className="text-muted">엄격한 기준을 통과한 무사고 차량들입니다.</p>
                   </div>
-                  <Button variant="outline-secondary" className="rounded-pill px-4">전체보기</Button>
+                  <Button variant="outline-secondary" className="rounded-pill px-4" onClick={handleShowAll}>전체차량보기</Button>
                 </div>
 
                 <Row className="g-4">
-                  {cars.map((car) => (
-                    <Col key={car.carId} lg={3} md={4} sm={6}>
-                      <CardComponent car={car}/>
+                  {cars.length > 0 ? (
+                    cars.map((car) => (
+                      <Col key={car.carId} lg={3} md={4} sm={6}>
+                        <CardComponent car={car}/>
+                      </Col>
+                    ))
+                  ) : (
+                    <Col className="text-center py-5">
+                      <p className="text-muted">검색 조건에 맞는 차량이 없습니다.</p>
                     </Col>
-                  ))}
+                  )}
                 </Row>
               </Container>
             </section>
