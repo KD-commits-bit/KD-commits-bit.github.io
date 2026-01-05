@@ -1,6 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.ac.hannam.multi.cricket.search.mapper.SearchMapper">
+    <resultMap id="carImageMap" type="kr.ac.hannam.multi.cricket.vo.CarImagesVO">
+        <id property="carImageId" column="CI_CAR_IMAGE_ID"/>
+        <result property="carId" column="CI_CAR_ID"/>
+        <result property="carImageContent" column="CI_CAR_IMAGE_CONTENT"/>
+        <result property="isPrimary" column="CI_IS_PRIMARY"/>
+    </resultMap>
+
+    <resultMap id="carModelMap" type="kr.ac.hannam.multi.cricket.vo.CarModelsVO">
+        <id property="modelId" column="CM_MODEL_ID"/>
+        <result property="modelName" column="CM_MODEL_NAME"/>
+        <result property="brandId" column="CM_BRAND_ID"/>
+    </resultMap>
+
+    <resultMap id="carBrandMap" type="kr.ac.hannam.multi.cricket.vo.CarBrandsVO">
+        <id property="brandId" column="CB_BRAND_ID"/>
+        <result property="brandName" column="CB_BRAND_NAME"/>
+    </resultMap>
+
+    <resultMap id="carsMap" type="kr.ac.hannam.multi.cricket.vo.CarsVO">
+        <id property="carId" column="C_CAR_ID"/>
+        <result property="modelId" column="C_MODEL_ID"/>
+        <result property="adminNo" column="C_ADMIN_NO"/>
+        <result property="carYear" column="C_CAR_YEAR"/>
+        <result property="carMileage" column="C_CAR_MILEAGE"/>
+        <result property="carPrice" column="C_CAR_PRICE"/>
+        <result property="carDescription" column="C_CAR_DESCRIPTION"/>
+        <result property="carStatus" column="C_CAR_STATUS"/>
+        <result property="carCreatedAt" column="C_CAR_CREATED_AT"/>
+        <result property="carCondition" column="C_CAR_CONDITION"/>
+        <association property="carModels" resultMap="carModelMap"/>
+        <association property="carBrands" resultMap="carBrandMap"/>
+
+        <collection property="carImages" ofType="kr.ac.hannam.multi.cricket.vo.CarImagesVO">
+            <id property="carImageId" column="CI_CAR_IMAGE_ID"/>
+            <result property="carId" column="CI_CAR_ID"/>
+            <result property="carImageContent" column="CI_CAR_IMAGE_CONTENT"/>
+            <result property="isPrimary" column="CI_IS_PRIMARY"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectSearchedCarList" resultMap="carsMap">
+        SELECT C.CAR_ID AS C_CAR_ID
+             , C.MODEL_ID AS C_MODEL_ID
+             , C.ADMIN_NO AS C_ADMIN_NO
+             , C.CAR_YEAR AS C_CAR_YEAR
+             , C.CAR_MILEAGE AS C_CAR_MILEAGE
+             , C.CAR_PRICE AS C_CAR_PRICE
+             , C.CAR_DESCRIPTION AS C_CAR_DESCRIPTION
+             , C.CAR_STATUS AS C_CAR_STATUS
+             , C.CAR_CREATED_AT AS C_CAR_CREATED_AT
+             , CI.CAR_IMAGE_ID AS CI_CAR_IMAGE_ID
+             , CI.CAR_ID AS CI_CAR_ID
+             , CI.IS_PRIMARY AS CI_IS_PRIMARY
+             , CM.MODEL_ID AS CM_MODEL_ID
+             , CM.MODEL_NAME AS CM_MODEL_NAME
+             , CM.BRAND_ID AS CM_BRAND_ID
+             , CB.BRAND_ID AS CB_BRAND_ID
+             , CB.BRAND_NAME AS CB_BRAND_NAME
+        FROM CARS C
+                 LEFT JOIN CAR_IMAGES CI ON C.CAR_ID = CI.CAR_ID
+                 LEFT JOIN CAR_MODELS CM ON C.MODEL_ID = CM.MODEL_ID
+                 LEFT JOIN CAR_BRANDS CB ON CM.BRAND_ID = CB.BRAND_ID
+        WHERE C.MODEL_ID=#{modelId}
+        ORDER BY C.CAR_ID,
+                 CASE WHEN CI.IS_PRIMARY = 'Y'
+                          THEN 0
+                      ELSE 1
+                     END
+                , CI.CAR_IMAGE_ID
+    </select>
+
     <select id="selectCarBrandsList">
         SELECT BRAND_ID
                , BRAND_NAME
@@ -12,5 +83,39 @@
                , MODEL_NAME
           FROM CAR_MODELS
          WHERE BRAND_ID=#{brandId}
+    </select>
+
+    <select id="selectCarListByBudget" resultMap="carsMap">
+        SELECT C.CAR_ID AS C_CAR_ID
+             , C.MODEL_ID AS C_MODEL_ID
+             , C.ADMIN_NO AS C_ADMIN_NO
+             , C.CAR_YEAR AS C_CAR_YEAR
+             , C.CAR_MILEAGE AS C_CAR_MILEAGE
+             , C.CAR_PRICE AS C_CAR_PRICE
+             , C.CAR_DESCRIPTION AS C_CAR_DESCRIPTION
+             , C.CAR_STATUS AS C_CAR_STATUS
+             , C.CAR_CREATED_AT AS C_CAR_CREATED_AT
+             , CI.CAR_IMAGE_ID AS CI_CAR_IMAGE_ID
+             , CI.CAR_ID AS CI_CAR_ID
+             , CI.IS_PRIMARY AS CI_IS_PRIMARY
+             , CM.MODEL_ID AS CM_MODEL_ID
+             , CM.MODEL_NAME AS CM_MODEL_NAME
+             , CM.BRAND_ID AS CM_BRAND_ID
+             , CB.BRAND_ID AS CB_BRAND_ID
+             , CB.BRAND_NAME AS CB_BRAND_NAME
+        FROM CARS C
+                 LEFT JOIN CAR_IMAGES CI ON C.CAR_ID = CI.CAR_ID
+                 LEFT JOIN CAR_MODELS CM ON C.MODEL_ID = CM.MODEL_ID
+                 LEFT JOIN CAR_BRANDS CB ON CM.BRAND_ID = CB.BRAND_ID
+        WHERE C.CAR_PRICE BETWEEN #{minPrice} AND #{maxPrice}
+        <if test="brandId != null and brandId != ''">
+            AND CB.BRAND_ID = #{brandId}
+        </if>
+        ORDER BY C.CAR_ID,
+                 CASE WHEN CI.IS_PRIMARY = 'Y'
+                          THEN 0
+                      ELSE 1
+                     END
+                , CI.CAR_IMAGE_ID
     </select>
 </mapper>
