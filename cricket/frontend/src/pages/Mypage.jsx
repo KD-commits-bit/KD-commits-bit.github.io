@@ -231,44 +231,50 @@ function Mypage({user}) {
               {!loading && !error && (
                 <>
                   {purchaseCars.length > 0 ? (
-                    purchaseCars.map((car, index) => (
-                      <div
-                        key={car.carId || index}
-                        className={`d-flex align-items-center py-3 ${index !== purchaseCars.length - 1 ? 'border-bottom' : ''}`}
-                        onClick={() => navigate(`/cars/${car.carId}`)}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        {/* 1. 차량 이미지 (썸네일) */}
-                        <div className="flex-shrink-0">
-                          <img
-                            src={car.carImages?.carImageId || "https://via.placeholder.com/150"}
-                            alt="car thumbnail"
-                            className="rounded"
-                            style={{ width: '120px', height: '80px', objectFit: 'cover' }}
-                          />
-                        </div>
+                    purchaseCars.map((order, index) => {
+                      // 데이터 구조에 맞춰 변수를 미리 정의하면 코드가 깔끔해집니다.
+                      const carInfo = order.cars && order.cars[0]; // order 내부의 cars 배열의 첫 번째 객체
 
-                        {/* 2. 차량 정보 */}
-                        <div className="flex-grow-1 ms-3">
-                          <h5 className="mb-1 fs-6 fw-bold">
-                            {car.cars[index].carBrands.brandName} {car.cars[index].carModels.modelName}
-                          </h5>
-                          <div className="text-muted small mb-1">
-                            {car.cars[index].carYear}년식 | {Number(car.cars[index].carMileage).toLocaleString()} km
-                          </div>
-                          {/* (선택사항) 주문 날짜가 있다면 여기에 추가 */}
-                          <div className="text-secondary x-small">주문일: {car.saleDate}</div>
-                        </div>
+                      if (!carInfo) return null; // 혹시라도 차량 정보가 없으면 출력 안 함
 
-                        {/* 3. 가격 및 상태 버튼 */}
-                        <div className="text-end ms-3" style={{ minWidth: '100px' }}>
-                          <div className="fw-bold mb-1">
-                            {Number(car.cars[index].carPrice).toLocaleString()} 만원
+                      return (
+                        <div
+                          key={order.saleNo || index}
+                          className={`d-flex align-items-center py-3 ${index !== purchaseCars.length - 1 ? 'border-bottom' : ''}`}
+                          onClick={() => navigate(`/cars/${order.carId}`)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          {/* 1. 차량 이미지 (order 객체 바로 아래의 carImages 사용) */}
+                          <div className="flex-shrink-0">
+                            <img
+                              src={order.carImages?.carImageId || "https://via.placeholder.com/150"}
+                              alt="car thumbnail"
+                              className="rounded"
+                              style={{ width: '120px', height: '80px', objectFit: 'cover' }}
+                            />
                           </div>
-                          <span className="badge bg-success">구매 완료</span>
+
+                          {/* 2. 차량 정보 */}
+                          <div className="flex-grow-1 ms-3">
+                            <h5 className="mb-1 fs-6 fw-bold">
+                              {carInfo.carBrands?.brandName} {carInfo.carModels?.modelName}
+                            </h5>
+                            <div className="text-muted small mb-1">
+                              {carInfo.carYear}년식 | {Number(carInfo.carMileage).toLocaleString()} km
+                            </div>
+                            <div className="text-secondary x-small">주문일: {order.saleDate}</div>
+                          </div>
+
+                          {/* 3. 가격 및 상태 버튼 */}
+                          <div className="text-end ms-3" style={{ minWidth: '100px' }}>
+                            <div className="fw-bold mb-1 text-primary">
+                              {Number(carInfo.carPrice).toLocaleString()} 만원
+                            </div>
+                            <span className="badge bg-success">구매 완료</span>
+                          </div>
                         </div>
-                      </div>
-                    ))
+                      );
+                    })
                   ) : (
                     // 데이터가 없을 때 표시
                     <div className="empty-text text-center py-5 text-muted">

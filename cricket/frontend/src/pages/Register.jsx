@@ -1,49 +1,34 @@
-import React, {useEffect, useState} from "react";
-import { Form, Button, Container, Card, InputGroup, Row, Col } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Form, Button, Container, Card, Row, Col, FloatingLabel, InputGroup } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./Register.css";
 
 export default function Register() {
   const [form, setForm] = useState({
-    userEmail: "",
-    userPassword: "",
-    userName: "",
-    userNickname: "",
-    userPhone: "",
-
-    // USER_ADDRESS
-    zipcode: "",
-    sido: "",
-    sigungu: "",
-    eupmyundong: "",
-    roadName: "",
-    addressLine1: "",
-    addressLine2: "",
-    isDefault: 1
+    userEmail: "", userPassword: "", userName: "", userNickname: "", userPhone: "",
+    zipcode: "", sido: "", sigungu: "", eupmyundong: "", roadName: "",
+    addressLine1: "", addressLine2: "", isDefault: 1
   });
 
   const [emailChecked, setEmailChecked] = useState(false);
   const [emailAvailable, setEmailAvailable] = useState(false);
   const [emailCheckMessage, setEmailCheckMessage] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
 
   const navigate = useNavigate();
 
+  const isPasswordMatch = form.userPassword !== "" && form.userPassword === passwordConfirm;
+
   useEffect(() => {
     const script = document.createElement("script");
-    script.src =
-      "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+    script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
     script.async = true;
     document.body.appendChild(script);
   }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm({
-      ...form,
-      [name]: type === "checkbox" ? (checked ? 1 : 0) : value
-    });
-
+    setForm({ ...form, [name]: type === "checkbox" ? (checked ? 1 : 0) : value });
     if (name === "userEmail") {
       setEmailChecked(false);
       setEmailCheckMessage("");
@@ -51,33 +36,8 @@ export default function Register() {
   };
 
   const handlePost = () => {
-    if (!window.daum || !window.daum.Postcode) {
-      alert("우편번호 서비스를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
-      return;
-    }
-
     new window.daum.Postcode({
       oncomplete: function (data) {
-        let roadAddr = data.roadAddress; // 도로명 주소
-        let extraRoadAddr = "";
-
-        // 법정동
-        if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
-          extraRoadAddr += data.bname;
-        }
-
-        // 건물명
-        if (data.buildingName !== "" && data.apartment === "Y") {
-          extraRoadAddr +=
-            extraRoadAddr !== ""
-              ? `, ${data.buildingName}`
-              : data.buildingName;
-        }
-
-        if (extraRoadAddr !== "") {
-          extraRoadAddr = ` (${extraRoadAddr})`;
-        }
-
         setForm((prev) => ({
           ...prev,
           zipcode: data.zonecode,
@@ -85,7 +45,7 @@ export default function Register() {
           sigungu: data.sigungu,
           eupmyundong: data.bname,
           roadName: data.roadname,
-          addressLine1: roadAddr,
+          addressLine1: data.roadAddress,
           addressLine2: ""
         }));
       }
@@ -97,195 +57,146 @@ export default function Register() {
       setEmailCheckMessage("이메일을 입력해주세요.");
       return;
     }
-
-    axios
-      .get(`http://localhost:8080/api/register/check-email?email=${form.userEmail}`)
-      .then((response) => {
+    axios.get(`http://localhost:8080/api/register/check-email?email=${form.userEmail}`)
+      .then((res) => {
         setEmailChecked(true);
-        if (response.data.isDuplicated) {
-          setEmailAvailable(false);
-          setEmailCheckMessage("이미 사용중인 이메일입니다.");
-        } else {
-          setEmailAvailable(true);
-          setEmailCheckMessage("사용 가능한 이메일입니다.");
-        }
+        setEmailAvailable(!res.data.isDuplicated);
+        setEmailCheckMessage(res.data.isDuplicated ? "이미 사용중인 이메일입니다." : "사용 가능한 이메일입니다.");
       })
-      .catch(() => {
-        setEmailCheckMessage("이메일 중복 확인에 실패했습니다.");
-      });
+      .catch(() => setEmailCheckMessage("중복 확인 오류 발생"));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!emailChecked || !emailAvailable) {
       alert("이메일 중복 확인을 해주세요.");
       return;
     }
 
-    axios
-      .post("http://localhost:8080/api/register", form)
+    if (form.userPassword !== passwordConfirm) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    axios.post("http://localhost:8080/api/register", form)
       .then(() => {
-        alert("회원가입이 완료되었습니다.");
+        alert("반갑습니다! 가입이 완료되었습니다.");
         navigate("/login");
       })
-      .catch(() => {
-        alert("회원가입에 실패했습니다.");
-      });
+      .catch(() => alert("가입 실패. 입력 정보를 확인해주세요."));
   };
 
   return (
-    <div className="register-container">
-      <Card className="register-card">
-        <Card.Header>회원가입</Card.Header>
-        <Card.Body>
-          <Form onSubmit={handleSubmit}>
-            {/* 이메일 */}
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>이메일</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type="email"
-                      name="userEmail"
-                      value={form.userEmail}
-                      onChange={handleChange}
-                      required
-                    />
-                    <Button type="button" variant="outline-secondary" onClick={handleCheckEmail}>
-                      중복 확인
-                    </Button>
-                  </InputGroup>
-                  <Form.Text className={emailAvailable ? "text-success" : "text-danger"}>
-                    {emailCheckMessage}
-                  </Form.Text>
-                </Form.Group>
-              </Col>
-              {/* 비밀번호 */}
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>비밀번호</Form.Label>
-                  <Form.Control
-                    type="password"
-                    name="userPassword"
-                    value={form.userPassword}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+    <div className="register-bg">
+      <Container className="py-5" style={{ maxWidth: '600px' }}>
+        <div className="text-center mb-4">
+          <img
+            src="/Logo.png"
+            alt="Logo"
+            onClick={() => navigate("/")}
+            style={{ height: '55px', cursor: "pointer" }}
+          />
+          <h4 className="fw-bold mt-3">회원가입</h4>
+        </div>
 
-            {/* 비밀번호 */}
-            <Row>
-              <Col md={6}>
-                {/* 전화번호 */}
-                <Form.Group className="mb-3">
-                  <Form.Label>전화번호</Form.Label>
-                  <Form.Control
-                    name="userPhone"
-                    value={form.userPhone}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>이름</Form.Label>
-                  <Form.Control name="userName" value={form.userName} onChange={handleChange} required />
-                </Form.Group>
-              </Col>
-            </Row>
+        <Card className="register-card border-0 shadow-lg mx-auto">
+          <Card.Body className="p-4 p-md-5">
+            <Form onSubmit={handleSubmit}>
+              {/* 섹션 1: 계정 정보 */}
+              <div className="mb-4">
+                <h6 className="fw-bold mb-3 text-primary border-start border-4 border-primary ps-2">계정 정보</h6>
+                <Row className="g-2"> {/* 간격을 g-3에서 g-2로 줄여 더 촘촘하게 */}
+                  <Col md={8}>
+                    <FloatingLabel label="이메일 주소">
+                      <Form.Control type="email" name="userEmail" value={form.userEmail} onChange={handleChange} placeholder="name@example.com" required />
+                    </FloatingLabel>
+                  </Col>
+                  <Col md={4} className="d-grid">
+                    <Button variant="outline-primary" onClick={handleCheckEmail} style={{fontSize:'14px'}}>중복 확인</Button>
+                  </Col>
+                  <div className={`small ps-2 mb-2 ${emailAvailable ? "text-success" : "text-danger"}`}>{emailCheckMessage}</div>
 
-            <hr />
+                  <Col md={12}>
+                    <FloatingLabel label="비밀번호">
+                      <Form.Control
+                        type="password"
+                        name="userPassword"
+                        value={form.userPassword}
+                        onChange={handleChange}
+                        placeholder="Password"
+                        required
+                      />
+                    </FloatingLabel>
+                  </Col>
 
-            {/* 주소 */}
+                  {/* 비밀번호 확인 입력 */}
+                  <Col md={12}>
+                    <FloatingLabel label="비밀번호 확인">
+                      <Form.Control
+                        type="password"
+                        value={passwordConfirm}
+                        onChange={(e) => setPasswordConfirm(e.target.value)}
+                        placeholder="Confirm Password"
+                        required
+                        isInvalid={passwordConfirm !== "" && !isPasswordMatch} // 틀렸을 때 빨간 테두리
+                        isValid={passwordConfirm !== "" && isPasswordMatch}   // 맞았을 때 초록 테두리
+                      />
+                      {/* 피드백 메시지 */}
+                      <Form.Control.Feedback type="invalid">
+                        비밀번호가 일치하지 않습니다.
+                      </Form.Control.Feedback>
+                      <Form.Control.Feedback type="valid">
+                        비밀번호가 일치합니다.
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Col>
+                  <Col md={12} className="mb-2">
+                    <FloatingLabel label="이름">
+                      <Form.Control name="userName" value={form.userName} onChange={handleChange} placeholder="Name" required />
+                    </FloatingLabel>
+                  </Col>
+                  <Col md={12}>
+                    <FloatingLabel label="전화번호">
+                      <Form.Control name="userPhone" value={form.userPhone} onChange={handleChange} placeholder="Phone" required />
+                    </FloatingLabel>
+                  </Col>
+                </Row>
+              </div>
 
-            <Form.Group className="mb-2">
-              <Form.Label>우편번호</Form.Label>
-              <InputGroup>
-                <Form.Control name="zipcode" value={form.zipcode} readOnly required />
-                <Button variant="outline-secondary" onClick={handlePost}>
-                  우편번호 검색
-                </Button>
-              </InputGroup>
-            </Form.Group>
+              {/* 섹션 2: 주소 정보 */}
+              <div className="mb-4">
+                <h6 className="fw-bold mb-3 text-primary border-start border-4 border-primary ps-2">주소 정보</h6>
+                <Row className="g-2">
+                  <Col md={8}>
+                    <FloatingLabel label="우편번호">
+                      <Form.Control name="zipcode" value={form.zipcode} readOnly placeholder="Zipcode" required />
+                    </FloatingLabel>
+                  </Col>
+                  <Col md={4} className="d-grid">
+                    <Button variant="secondary" onClick={handlePost} style={{fontSize:'14px'}}>검색</Button>
+                  </Col>
+                  <Col md={12}>
+                    <FloatingLabel label="기본 주소">
+                      <Form.Control name="addressLine1" value={form.addressLine1} readOnly placeholder="Address" />
+                    </FloatingLabel>
+                  </Col>
+                  <Col md={12}>
+                    <FloatingLabel label="상세 주소">
+                      <Form.Control name="addressLine2" value={form.addressLine2} onChange={handleChange} placeholder="Detail Address" />
+                    </FloatingLabel>
+                  </Col>
+                </Row>
+              </div>
 
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-2">
-                  <Form.Label>시/도</Form.Label>
-                  <Form.Control name="sido" value={form.sido} readOnly required />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-2">
-                  <Form.Label>시/군/구</Form.Label>
-                  <Form.Control name="sigungu" value={form.sigungu} readOnly required />
-                </Form.Group>
-              </Col>
-            </Row>
+              <Form.Check type="checkbox" label="기본 배송지로 설정" name="isDefault" checked={form.isDefault === 1} onChange={handleChange} className="mb-4 text-muted small" />
 
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-2">
-                  <Form.Label>읍/면/동</Form.Label>
-                  <Form.Control
-                    name="eupmyundong"
-                    value={form.eupmyundong}
-                    readOnly
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-2">
-                  <Form.Label>도로명</Form.Label>
-                  <Form.Control
-                    name="roadName"
-                    value={form.roadName}
-                    readOnly
-                    required
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-2">
-                  <Form.Label>기본주소</Form.Label>
-                  <Form.Control name="addressLine1" value={form.addressLine1} readOnly />
-                </Form.Group>
-              </Col>
-            </Row>
-
-            <Form.Group className="mb-3">
-              <Form.Label>상세주소</Form.Label>
-              <Form.Control
-                name="addressLine2"
-                value={form.addressLine2}
-                onChange={handleChange}
-              />
-            </Form.Group>
-
-            <Form.Check
-              type="checkbox"
-              label="기본 배송지로 설정"
-              name="isDefault"
-              checked={form.isDefault === 1}
-              onChange={handleChange}
-              className="mb-3"
-            />
-
-            <Button type="submit" className="w-100">
-              회원가입
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
+              <Button type="submit" size="lg" className="w-100 rounded-pill fw-bold py-3 shadow-sm" style={{ background: 'linear-gradient(45deg, #0d6efd, #00c6ff)', border: 'none', fontSize:'16px' }}>
+                가입 완료
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </Container>
     </div>
   );
 }
