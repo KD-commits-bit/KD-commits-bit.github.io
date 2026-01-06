@@ -13,6 +13,19 @@
         WHERE USER_NO = #{userNo}
     </update>
 
+    <update id="updateUserAddress">
+        UPDATE USER_ADDRESS
+        SET
+            ZIPCODE = #{zipcode},
+            SIDO = #{sido},
+            SIGUNGU = #{sigungu},
+            EUPMYUNDONG = #{eupmyundong},
+            ROAD_NAME = #{roadName},
+            ADDRESS_LINE_1 = #{addressLine1},
+            ADDRESS_LINE_2 = #{addressLine2}
+        WHERE USER_NO = #{userNo}
+    </update>
+
     <delete id="deleteUser">
         DELETE FROM USERS
         WHERE USER_NO = #{userNo}

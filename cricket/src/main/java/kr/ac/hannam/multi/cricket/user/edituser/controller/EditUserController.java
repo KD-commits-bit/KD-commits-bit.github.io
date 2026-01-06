@@ -16,10 +16,6 @@ public class EditUserController {
 
     @PutMapping("/profile")
     public ResponseEntity<?> updateUserProfile(@RequestBody UserProfileUpdateRequest request) {
-        // In a real application, you would also perform authentication and authorization checks here
-        // to ensure the user is authorized to modify this profile.
-        // For example, retrieve user ID from JWT or session and compare with request.getUserId()
-
         try {
             editUserService.modifyUser(request);
 

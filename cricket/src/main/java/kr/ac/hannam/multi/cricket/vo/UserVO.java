@@ -24,4 +24,13 @@ public class UserVO {
     private byte[] userProfileImg;
     private String userPhone;
     private String userCreatedAt;
+
+    // added
+    private String zipcode;
+    private String sido;
+    private String sigungu;
+    private String eupmyundong;
+    private String roadName;
+    private String addressLine1;
+    private String addressLine2;
 }

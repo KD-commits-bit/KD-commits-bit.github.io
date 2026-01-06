@@ -3,6 +3,8 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import apiClient from '../api/axios';
 import './Mypage.css';
 import {useNavigate} from "react-router-dom";
+import Swal from 'sweetalert2';
+import toast from 'react-hot-toast';
 
 function Mypage({user}) {
   const navigate = useNavigate();
@@ -69,16 +71,37 @@ function Mypage({user}) {
   }, []);
 
   const handleRemoveFavorite = async (carId) => {
-    if (!window.confirm("찜 목록에서 삭제하시겠습니까?")) {
-      return;
-    }
-    try {
-      await apiClient.delete(`/api/favorites/${carId}?userNo=${user.no}`);
-      // 삭제 후 목록을 다시 불러옵니다.
-      fetchFavoriteCars();
-    } catch (e) {
-      console.error("Error removing favorite:", e);
-      alert("삭제에 실패했습니다.");
+    const result = await Swal.fire({
+      title: '찜 목록에서 삭제하시겠습니까?',
+      text: "이 차량을 찜 목록에서 제외합니다.",
+      icon: 'info',
+      iconColor: '#0d6efd',
+
+      showCancelButton: true,
+      confirmButtonText: '삭제하기',
+      cancelButtonText: '유지하기',
+
+      confirmButtonColor: '#0d6efd',
+      cancelButtonColor: '#f8f9fa',
+
+      customClass: {
+        confirmButton: 'rounded-pill px-4 py-2 fw-bold me-3',
+        cancelButton: 'rounded-pill px-4 py-2 fw-bold text-dark border',
+        popup: 'rounded-4 shadow-lg'
+      },
+      buttonsStyling: false,
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await apiClient.delete(`/api/favorites/${carId}?userNo=${user.no}`);
+        fetchFavoriteCars();
+        toast.success('찜 목록에서 삭제되었습니다.', {
+          style: { borderRadius: '10px', background: '#333', color: '#fff' }
+        });
+      } catch (e) {
+        toast.error('삭제에 실패했습니다.');
+      }
     }
   };
 
@@ -103,14 +126,15 @@ function Mypage({user}) {
         {/* 상단 프로필 카드 */}
         <Card className="profile-summary-card">
           <Card.Body>
-            <Row>
-              <Col md={3} className="text-center">
+            <Row className="align-items-center">
+              <Col md={4} className="text-center border-end">
+                <div className="profile-greeting">마이페이지</div>
                 <div className="profile-name">{user.name}님</div>
                 <div className="profile-edit" onClick={() => {
                   navigate('/edit');
                 }}>정보 수정</div>
               </Col>
-              <Col md={9}>
+              <Col md={8}>
                 <Row className="summary-boxes">
                   <Col className="summary-item" style={{cursor: "pointer"}} onClick={handleScrollToFavorite}>
                     <div className="label">찜한차량</div>
