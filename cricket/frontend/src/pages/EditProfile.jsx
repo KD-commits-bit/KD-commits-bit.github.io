@@ -1,211 +1,245 @@
-import React, { useState } from "react";
-import { Form, Button, Row, Col, InputGroup } from "react-bootstrap";
-import {useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import api from '../api/axios';
-import {useAuth} from "../hooks/useAuth.js"; // Assuming axios is configured and exported as 'api'
+import { useAuth } from "../hooks/useAuth.js";
+import Swal from 'sweetalert2';
+import toast from 'react-hot-toast';
+import './Mypage.css';
 
-export default function EditProfile({user}) {
+export default function EditProfile({ user }) {
   const navigate = useNavigate();
   const { logout } = useAuth();
+
+  console.log(user);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
+  const handleAddressSearch = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        setFormData((prev) => ({
+          ...prev,
+          zipcode: data.zonecode,
+          addressLine1: data.roadAddress,
+          sido: data.sido,
+          sigungu: data.sigungu,
+          eupmyundong: data.bname,
+          roadName: data.roadname,
+          addressLine2: ""
+        }));
+      }
+    }).open();
+  };
 
   const [formData, setFormData] = useState({
     newPassword: '',
     confirmNewPassword: '',
     emailId: user.id ? user.id.split("@")[0] : '',
-    emailDomain: user.id.split("@")[1],
-    customDomain: ''
+    emailDomain: user.id ? user.id.split("@")[1] : '',
+    customDomain: '',
+    zipcode: user.zipcode || '',
+    addressLine1: user.addressLine1 || '',
+    addressLine2: user.addressLine2 || '',
+    sido: user.sido || '',
+    sigungu: user.sigungu || '',
+    eupmyundong: user.eupmyundong || '',
+    roadName: user.roadName || ''
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
+    setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.newPassword && formData.newPassword !== formData.confirmNewPassword) {
-      alert('새 비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+      toast.error('새 비밀번호가 일치하지 않습니다.');
       return;
     }
 
-    const domain =
-      formData.emailDomain === "직접 입력"
-        ? formData.customDomain
-        : formData.emailDomain;
+    const domain = formData.emailDomain === "직접 입력" ? formData.customDomain : formData.emailDomain;
 
     try {
       const updatedData = {
         userId: user.id,
         password: formData.newPassword || undefined,
         email: `${formData.emailId}@${domain}`,
+        zipcode: formData.zipcode,
+        addressLine1: formData.addressLine1,
+        addressLine2: formData.addressLine2,
+        sido: formData.sido,
+        sigungu: formData.sigungu,
+        eupmyundong: formData.eupmyundong,
+        roadName: formData.roadName
       };
 
-      // Filter out undefined values if password is not changed
       const payload = Object.fromEntries(Object.entries(updatedData).filter(([_, v]) => v !== undefined));
+      await api.put('/api/user/profile', payload);
 
-      const response = await api.put('/api/user/profile', payload); // Adjust endpoint as needed
-      console.log('Update successful:', response.data);
-      alert('프로필이 성공적으로 업데이트되었습니다.\n다시 로그인해주세요.');
+      // 성공 시 세련된 알림 후 로그아웃
+      await Swal.fire({
+        title: '수정 완료!',
+        text: '보안을 위해 다시 로그인해주세요.',
+        icon: 'success',
+        confirmButtonColor: '#0d6efd'
+      });
 
       logout();
       navigate('/');
     } catch (error) {
-      console.error('Update failed:', error);
-      alert('프로필 업데이트에 실패했습니다: ' + (error.response?.data?.message || error.message));
+      toast.error('업데이트 실패: ' + (error.response?.data?.message || '잠시 후 다시 시도해주세요.'));
     }
   };
 
-  const handleDelete = async (e) => {
-    e.preventDefault();
+  const handleDelete = async () => {
+    const result = await Swal.fire({
+      title: '정말 탈퇴하시겠습니까?',
+      text: "그동안 쌓인 모든 정보가 영구 삭제됩니다.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '탈퇴하기',
+      cancelButtonText: '취소',
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      customClass: {
+        confirmButton: 'rounded-pill px-4 me-2',
+        cancelButton: 'rounded-pill px-4'
+      },
+      buttonsStyling: false
+    });
 
-    if (!window.confirm('정말로 회원 탈퇴를 하시겠습니까? 모든 정보가 삭제됩니다.')) {
-      return;
+    if (result.isConfirmed) {
+      try {
+        await api.delete('/api/user/delete');
+        await Swal.fire('탈퇴 완료', '정상적으로 처리되었습니다.', 'success');
+        logout();
+        navigate('/');
+      } catch (e) {
+        toast.error('탈퇴 처리 중 오류가 발생했습니다.');
+      }
     }
-
-    try {
-      const resp = await api.delete('/api/user/delete');
-
-      console.log('Delete success:', resp);
-      alert('회원 탈퇴가 완료되었습니다.');
-
-      logout();
-      navigate('/');
-    } catch (e) {
-      console.error('Delete failed:', e);
-      alert('회원 탈퇴에 실패했습니다: ' + (e.response?.data?.message || e.message));
-    }
-  }
-
-  console.log("User:", user);
+  };
 
   return (
-    <div className="container mt-5" style={{ maxWidth: "800px", padding: "80px"}}>
-      <h3 className="mb-4 fw-bold">회원정보 수정</h3>
-      <p>
-        꼭 알아두세요!
-      </p>
-      <p className="text-muted small">
-        • H Car는 고객님의 동의 없이 제3자에게 정보를 제공하지 않습니다.
-      </p>
-      <br/>
-      <Form onSubmit={handleSubmit}>
-        {/* 고객명 */}
-        <Form.Group as={Row} className="mb-3">
-          <Form.Label column sm="3" className="fw-bold">고객명</Form.Label>
-          <Col sm="9">
-            <Form.Control type="text" value={user.name} disabled />
-          </Col>
-        </Form.Group>
+    <div className="mypage-wrapper"> {/* 배경색 유지를 위해 동일 클래스 사용 */}
+      <Container style={{ maxWidth: "700px" }}>
+        <Card className="profile-edit-card border-0 shadow-sm">
+          <Card.Body className="p-5">
+            <h3 className="mb-4 fw-bold text-center">회원정보 수정</h3>
+            <div className="info-notice mb-5">
+              <p className="fw-bold mb-1">💡 꼭 알아두세요!</p>
+              <p className="text-muted small mb-0">• H Car는 고객님의 동의 없이 제3자에게 정보를 제공하지 않습니다.</p>
+              <p className="text-muted small">• 개인정보 변경 시 보안을 위해 재로그인이 필요합니다.</p>
+            </div>
 
-        {/* 휴대폰 번호 */}
-        <Form.Group as={Row} className="mb-3">
-          <Form.Label column sm="3" className="fw-bold">휴대폰번호</Form.Label>
-          <Col sm="9">
-            <InputGroup>
-              <Form.Control type="text" value={user.phone} disabled />
-              <Button variant="outline-secondary" className="ms-2">번호 변경</Button>
-            </InputGroup>
-          </Col>
-        </Form.Group>
+            <Form onSubmit={handleSubmit}>
+              {/* 고객명 (Read Only) */}
+              <div className="mb-4">
+                <Form.Label className="fw-bold small text-secondary">고객명</Form.Label>
+                <Form.Control type="text" value={user.name} disabled className="bg-light border-0 py-2" />
+              </div>
 
-        {/* 새 비밀번호 */}
-        <Form.Group as={Row} className="mb-3">
-          <Form.Label column sm="3" className="fw-bold">새 비밀번호</Form.Label>
-          <Col sm="9">
-            <Form.Control
-              type="password"
-              placeholder="비밀번호 입력"
-              name="newPassword"
-              value={formData.newPassword}
-              onChange={handleChange}
-            />
-          </Col>
-        </Form.Group>
+              {/* 비밀번호 섹션 */}
+              <Row className="mb-4">
+                <Col md={6}>
+                  <Form.Label className="fw-bold small text-secondary">새 비밀번호</Form.Label>
+                  <Form.Control type="password" name="newPassword" value={formData.newPassword} onChange={handleChange} placeholder="변경 시 입력" className="py-2" />
+                </Col>
+                <Col md={6}>
+                  <Form.Label className="fw-bold small text-secondary">비밀번호 확인</Form.Label>
+                  <Form.Control type="password" name="confirmNewPassword" value={formData.confirmNewPassword} onChange={handleChange} placeholder="한 번 더 입력" className="py-2" />
+                </Col>
+              </Row>
 
-        {/* 새 비밀번호 확인 */}
-        <Form.Group as={Row} className="mb-3">
-          <Form.Label column sm="3" className="fw-bold">새로운 비밀번호 확인</Form.Label>
-          <Col sm="9">
-            <Form.Control
-              type="password"
-              placeholder="비밀번호 재입력"
-              name="confirmNewPassword"
-              value={formData.confirmNewPassword}
-              onChange={handleChange}
-            />
-          </Col>
-        </Form.Group>
+              {/* 이메일 섹션 */}
+              <div className="mb-5">
+                <Form.Label className="fw-bold small text-secondary">이메일 주소</Form.Label>
+                <Row className="g-2 align-items-center">
+                  <Col>
+                    <Form.Control type="text" name="emailId" value={formData.emailId} onChange={handleChange} className="py-2" />
+                  </Col>
+                  <Col xs="auto">@</Col>
+                  <Col>
+                    {formData.emailDomain === "직접 입력" ? (
+                      <Form.Control type="text" name="customDomain" placeholder="도메인 입력" value={formData.customDomain} onChange={handleChange} className="py-2" />
+                    ) : (
+                      <Form.Select name="emailDomain" value={formData.emailDomain} onChange={handleChange} className="py-2">
+                        <option value={user.id.split("@")[1]}>{user.id.split("@")[1]}</option>
+                        <option>naver.com</option>
+                        <option>gmail.com</option>
+                        <option>daum.net</option>
+                        <option>직접 입력</option>
+                      </Form.Select>
+                    )}
+                  </Col>
+                </Row>
+              </div>
 
-        {/* 이메일 */}
-        <Form.Group as={Row} className="mb-4">
-          <Form.Label column sm="3" className="fw-bold">이메일</Form.Label>
-          <Col sm="9">
-            <Row>
-              <Col>
+              <div className="mb-5">
+                <Form.Label className="fw-bold small text-secondary">주소 정보</Form.Label>
+                <Row className="g-2 mb-2">
+                  <Col xs={8} md={4}>
+                    <Form.Control
+                      type="text"
+                      placeholder="우편번호"
+                      name="zipcode"
+                      value={formData.zipcode}
+                      readOnly
+                      className="bg-light py-2 border-0"
+                    />
+                  </Col>
+                  <Col xs={4} md={3}>
+                    <Button
+                      variant="dark"
+                      className="w-100 py-2 small fw-bold"
+                      onClick={handleAddressSearch}
+                    >
+                      주소 검색
+                    </Button>
+                  </Col>
+                </Row>
                 <Form.Control
                   type="text"
-                  name="emailId"
-                  value={formData.emailId}
-                  onChange={handleChange}
+                  name="addressLine1"
+                  placeholder="기본 주소"
+                  value={formData.addressLine1}
+                  readOnly
+                  className="bg-light mb-2 py-2 border-0"
                 />
-              </Col>
-              <Col xs="auto" className="d-flex align-items-center">
-                @
-              </Col>
-              <Col>
-                {/* 도메인이 '직접 입력'일 경우 → 텍스트 입력창 */}
-                {formData.emailDomain === "직접 입력" ? (
-                  <Form.Control
-                    type="text"
-                    name="customDomain"
-                    placeholder="도메인 입력"
-                    value={formData.customDomain || ""}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <Form.Select
-                    name="emailDomain"
-                    value={formData.emailDomain}
-                    onChange={handleChange}
-                  >
-                    <option>{user.id.split("@")[1]}</option>
-                    <option>naver.com</option>
-                    <option>gmail.com</option>
-                    <option>daum.net</option>
-                    <option>직접 입력</option>
-                  </Form.Select>
-                )}
-              </Col>
-            </Row>
-          </Col>
-        </Form.Group>
+                <Form.Control
+                  type="text"
+                  name="addressLine2"
+                  placeholder="상세 주소를 입력하세요 (동, 호수 등)"
+                  value={formData.addressLine2}
+                  onChange={handleChange}
+                  className="py-2"
+                />
+              </div>
 
-        {/* 이메일 */}
-        <Form.Group className="mb-5">
-          <Row>
-            <Col>
-              <Form.Label className="fw-bold">회원 탈퇴</Form.Label>
-            </Col>
-            <Col>
-              <Button variant="outline-secondary" onClick={handleDelete}>회원 탈퇴</Button>
-            </Col>
-          </Row>
-        </Form.Group>
+              {/* 하단 버튼 */}
+              <div className="d-flex gap-2">
+                <Button variant="outline-secondary" className="w-100 rounded-pill py-3 fw-bold" onClick={() => navigate(-1)}>취소</Button>
+                <Button type="submit" variant="primary" className="w-100 rounded-pill py-3 fw-bold shadow-sm">저장하기</Button>
+              </div>
 
-        <div className="text-center mt-4">
-          <Button variant="outline-secondary" size="lg" className="px-5 me-3" onClick={() => navigate(-1)}>
-            취소
-          </Button>
-          <Button type={"submit"} variant="primary" size="lg" className="px-5" >
-            저장하기
-          </Button>
-        </div>
-      </Form>
+              <hr className="my-5" />
 
+              <div className="d-flex justify-content-between align-items-center text-muted">
+                <span className="small">서비스를 더 이상 이용하지 않으시나요?</span>
+                <Button variant="link" className="text-danger text-decoration-none small" onClick={handleDelete}>회원 탈퇴</Button>
+              </div>
+            </Form>
+          </Card.Body>
+        </Card>
+      </Container>
     </div>
   );
 }

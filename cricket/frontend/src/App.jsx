@@ -19,6 +19,7 @@ import SearchSection from "./components/SearchSection.jsx";
 import "./App.css"
 import {Button, Col, Container, Row} from "react-bootstrap";
 import AdminCarListPage from "./pages/AdminCarListPage.jsx";
+import { Toaster } from 'react-hot-toast';
 
 
 
@@ -73,6 +74,8 @@ function App() {
 
   return (
     <div className="App">
+      <Toaster position="top-center" reverseOrder={false} />
+
       <Routes>
         <Route path="/" element={
           <>

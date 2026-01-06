@@ -5,6 +5,7 @@ import kr.ac.hannam.multi.cricket.user.edituser.mapper.EditUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EditUserServiceImpl implements EditUserService {
@@ -15,12 +16,15 @@ public class EditUserServiceImpl implements EditUserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void modifyUser(UserProfileUpdateRequest request) { // Changed signature
+    @Transactional
+    public void modifyUser(UserProfileUpdateRequest request) {
         // 1. Get userNo from userId
         String userNo = editUserMapper.findUserNoByUserId(request.getUserId());
         if (userNo == null || userNo.isEmpty()) {
             throw new IllegalArgumentException("User not found for ID: " + request.getUserId());
         }
+
+        request.setUserNo(userNo);
 
         // 2. Hash password if provided
         String hashedPassword = null;
@@ -30,6 +34,8 @@ public class EditUserServiceImpl implements EditUserService {
         
         // 3. Update user profile
         editUserMapper.updateUser(userNo, hashedPassword, request.getEmail());
+
+        editUserMapper.updateUserAddress(request);
     }
 
     @Override

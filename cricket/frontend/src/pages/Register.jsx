@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Form, Button, Container, Card, Row, Col, FloatingLabel, InputGroup } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -57,7 +58,7 @@ export default function Register() {
       setEmailCheckMessage("이메일을 입력해주세요.");
       return;
     }
-    axios.get(`http://localhost:8080/api/register/check-email?email=${form.userEmail}`)
+    axios.get(`/api/register/check-email?email=${form.userEmail}`)
       .then((res) => {
         setEmailChecked(true);
         setEmailAvailable(!res.data.isDuplicated);
@@ -69,18 +70,18 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!emailChecked || !emailAvailable) {
-      alert("이메일 중복 확인을 해주세요.");
+      toast.error("이메일 중복 확인을 해주세요.");
       return;
     }
 
     if (form.userPassword !== passwordConfirm) {
-      alert("비밀번호가 일치하지 않습니다.");
+      toast.error("비밀번호가 일치하지 않습니다.");
       return;
     }
 
     axios.post("http://localhost:8080/api/register", form)
       .then(() => {
-        alert("반갑습니다! 가입이 완료되었습니다.");
+        toast.success("반갑습니다! 가입이 완료되었습니다.");
         navigate("/login");
       })
       .catch(() => alert("가입 실패. 입력 정보를 확인해주세요."));
@@ -105,7 +106,7 @@ export default function Register() {
               {/* 섹션 1: 계정 정보 */}
               <div className="mb-4">
                 <h6 className="fw-bold mb-3 text-primary border-start border-4 border-primary ps-2">계정 정보</h6>
-                <Row className="g-2"> {/* 간격을 g-3에서 g-2로 줄여 더 촘촘하게 */}
+                <Row className="g-2">
                   <Col md={8}>
                     <FloatingLabel label="이메일 주소">
                       <Form.Control type="email" name="userEmail" value={form.userEmail} onChange={handleChange} placeholder="name@example.com" required />

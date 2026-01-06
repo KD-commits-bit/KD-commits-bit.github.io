@@ -1,34 +1,55 @@
 /* 전체 페이지 패딩 & 배경 */
 .mypage-wrapper {
-    background-color: #f8f9fa;
-    padding-top: 100px;
-    padding-bottom: 50px;
+    background-color: #f4f7fa; /* 살짝 푸른빛이 도는 밝은 배경 */
+    min-height: 100vh;
+    padding-top: 120px; /* Navbar와의 간격 확보 */
+    padding-bottom: 80px;
 }
 
-.car-card-image {
-    height: 200px;          /* 원하는 고정 높이 */
-    object-fit: cover;      /* 비율 유지 + 잘라내기 */
+.profile-summary-card .row.align-items-center {
+    min-height: 100px; /* 최소 높이를 지정해 안정감 부여 */
 }
 
-/* 상단 프로필 요약 카드 */
-.profile-summary-card {
-    border: none;
-    border-radius: 12px;
-    padding: 25px 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-}
-
-/* 이름 / 정보수정 */
+/* 이름 스타일 조금 더 강조 */
 .profile-name {
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 24px; /* 살짝 조절 */
+    font-weight: 800;
+    color: #333;
+    line-height: 1.2;
 }
 
+/* 정보 수정 링크 스타일 */
 .profile-edit {
-    margin-top: 5px;
-    color: #999;
-    font-size: 14px;
+    display: inline-block; /* 여백 조절을 위해 변경 */
+    margin-top: 10px;
+    color: #888; /* 기본 색상을 살짝 낮춰서 이름이 더 돋보이게 */
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
+    text-decoration: none; /* 밑줄 제거하고 호버 시에만 나타나게 변경 가능 */
+    padding: 4px 12px;
+    border: 1px solid #eee; /* 버튼 느낌 살짝 추가 */
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.profile-greeting {
+    font-size: 14px;
+    color: #888;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.profile-edit:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd;
+    border-color: #0d6efd;
+    opacity: 1;
+}
+
+/* 컬럼 사이 경계선 (선택 사항) */
+.border-end {
+    border-right: 1px solid #f0f0f0 !important;
 }
 
 /* 요약 박스 */
@@ -38,52 +59,152 @@
     text-align: center;
 }
 
+.summary-item {
+    padding: 15px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.summary-item:hover {
+    background-color: #f0f4ff; /* 호버 시 연한 블루 */
+    transform: translateY(-3px);
+}
+
 .summary-item .label {
-    color: #777;
+    color: #6c757d;
     font-size: 14px;
-    margin-bottom: 5px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .summary-item .value {
-    font-size: 28px;
-    font-weight: 700;
+    font-size: 32px;
+    font-weight: 800;
+    color: #0d6efd;
 }
 
-/* 섹션 공통 */
-.section {
-    width: 100%;
-}
-
+/* 섹션 타이틀 */
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    padding-left: 5px;
 }
 
 .section-header h4 {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: 800;
+    color: #2c3e50;
+    letter-spacing: -0.5px;
 }
 
-.view-more {
-    color: #888;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-/* 카드 스타일 */
-.section card,
+/* 차량 카드 공통 스타일 */
 .section .card {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    border: none;
+    border: none !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+.section .card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.car-card-image {
+    height: 180px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* 최근 본 차량 전용 스타일 */
+.recent-car-item .card {
+    background-color: #ffffff;
+}
+
+.x-small {
+    font-size: 11px;
+}
+
+/* 내차사기 주문관리 카드 */
+.order-management-card {
+    border-radius: 20px !important;
+}
+
+.order-management-card img {
+    transition: filter 0.3s;
+}
+
+.order-management-card div[onClick]:hover img {
+    filter: brightness(0.9);
 }
 
 /* 내용 없음 표시 */
 .empty-text {
     text-align: center;
-    padding: 25px 0;
-    color: #999;
-    font-size: 15px;
+    padding: 40px 0;
+    color: #adb5bd;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* 찜 취소 버튼 커스텀 */
+.btn-danger {
+    background-color: #ffeded !important;
+    color: #ff4d4f !important;
+    border: none !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-danger:hover {
+    background-color: #ff4d4f !important;
+    color: #ffffff !important;
+}
+
+/* 회원정보 수정 카드 전용 */
+.profile-edit-card {
+    border-radius: 24px !important;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.info-notice {
+    background-color: #f8faff;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #0d6efd;
+}
+
+/* 입력창 포커스 효과 */
+.profile-edit-card .form-control:focus,
+.profile-edit-card .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+}
+
+.profile-edit-card .form-control,
+.profile-edit-card .form-select {
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+}
+
+/* 회원탈퇴 링크 버튼 */
+.btn-link:hover {
+    font-weight: bold;
+    text-decoration: underline !important;
+}
+
+/* 모바일 환경 고려 (화면이 작아지면 경계선 제거) */
+@media (max-width: 768px) {
+    .border-end {
+        border-right: none !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
 }

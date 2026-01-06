@@ -3,6 +3,7 @@ import { Button, Form, FloatingLabel, Tab, Tabs, Card, Container } from 'react-b
 import apiClient from "../api/axios";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 function Login() {
   const [formData, setFormData] = useState({ id: "", password: "" });
@@ -17,11 +18,11 @@ function Login() {
     e.preventDefault();
     try {
       const res = await apiClient.post("/api/auth/login", formData);
-      alert("로그인 성공!");
+      toast.success(`${res.data.user.name}님, 환영합니다!`);
       login(res.data);
       navigate("/");
     } catch (err) {
-      alert("아이디 또는 비밀번호를 확인해주세요.");
+      toast.error("아이디 또는 비밀번호를 확인해주세요.");
     }
   };
 
@@ -31,14 +32,14 @@ function Login() {
       const res = await apiClient.post("/api/auth/login", formData);
       const roles = res.data?.user?.roles || [];
       if (!roles.includes("ROLE_ADMIN")) {
-        alert("관리자 계정이 아닙니다.");
+        toast.error("관리자 계정이 아닙니다.");
         return;
       }
       login(res.data);
-      alert("관리자 로그인 성공!");
+      toast.success("관리자 로그인 성공!");
       navigate("/admin");
     } catch (err) {
-      alert("관리자 인증에 실패했습니다.");
+      toast.error("관리자 인증에 실패했습니다.");
     }
   };
 

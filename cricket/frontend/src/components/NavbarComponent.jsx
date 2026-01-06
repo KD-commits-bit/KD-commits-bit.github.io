@@ -2,6 +2,7 @@ import React from "react";
 import {Button, Container, Form, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
+import toast from "react-hot-toast";
 
 function NavbarComponent({onSearchClick}) {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ function NavbarComponent({onSearchClick}) {
 
   const handleLogout = () => {
     logout();
-    alert('로그아웃 되었습니다.');
+    toast('로그아웃 되었습니다.');
     navigate('/');
   };
 
