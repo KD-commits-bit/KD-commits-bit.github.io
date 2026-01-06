@@ -96,7 +96,7 @@ function App() {
                 <Row className="g-4">
                   {cars.length > 0 ? (
                     cars.map((car) => (
-                      <Col key={car.carId} lg={3} md={4} sm={6}>
+                      <Col key={car.carId} lg={3} md={4} sm={6} className="d-flex">
                         <CardComponent car={car}/>
                       </Col>
                     ))

@@ -1,48 +1,49 @@
-.register-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f8f9fa;
+.register-bg {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    display: flex;
+    align-items: center;
 }
 
 .register-card {
-  width: 100%;
-  max-width: 800px;
-  border: none;
-  border-radius: 15px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    max-width: 500px; /* 카드의 최대 가로 길이를 500px로 제한 */
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, 0.98);
+    margin-top: 20px;
 }
 
-.register-card .card-header {
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  padding: 1.5rem;
+/* 입력창 높이를 살짝 줄여서 전체 세로 길이 최적화 */
+.form-control {
+    font-size: 15px;
+    padding: 0.8rem 0.75rem;
 }
 
-.register-card .card-body {
-  padding: 2rem;
+.form-floating > label {
+    font-size: 14px;
 }
 
-.register-card .form-label {
-  font-weight: bold;
+/* 입력창 포커스 효과 */
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+    border-color: #0d6efd;
 }
 
-.register-card .btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-  font-weight: bold;
-  padding: 0.75rem;
-  border-radius: 8px;
-  transition: background-color 0.3s;
+/* Floating Label 스타일 살짝 조정 */
+.form-floating > label {
+    color: #6c757d;
+    font-size: 14px;
 }
 
-.register-card .btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
+/* 주소 요약창 가독성 */
+.bg-light {
+    font-size: 14px;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    padding: 12px;
+}
+
+/* 버튼 호버 애니메이션 */
+.btn-primary:hover {
+    transform: translateY(-2px);
+    transition: all 0.2s;
 }
