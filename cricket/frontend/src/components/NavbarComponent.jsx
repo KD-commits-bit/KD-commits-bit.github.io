@@ -1,11 +1,11 @@
 import React from "react";
-import { Button, Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import {Button, Container, Form, Nav, Navbar, NavDropdown} from 'react-bootstrap';
+import {useNavigate} from "react-router-dom";
+import {useAuth} from "../hooks/useAuth";
 
-function NavbarComponent({ onSearchClick }) {
+function NavbarComponent({onSearchClick}) {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const {user, logout} = useAuth();
   const isAuthenticated = !!user;
 
   const handleLogout = () => {
@@ -44,17 +44,18 @@ function NavbarComponent({ onSearchClick }) {
               height: '70px',
               width: 'auto',
               objectFit: 'contain',
-              transition: 'transform 0.2s' }}
+              transition: 'transform 0.2s'
+            }}
             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'} // 살짝 커지는 효과
             onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
           />
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="navbarScroll" border="0" />
+        <Navbar.Toggle aria-controls="navbarScroll" border="0"/>
 
         <Navbar.Collapse id="navbarScroll">
           {/* 중앙 메뉴 */}
-          <Nav className="ms-4 my-2 my-lg-0" style={{ gap: "15px" }}>
+          <Nav className="ms-4 my-2 my-lg-0" style={{gap: "15px"}}>
             <Nav.Link onClick={() => navigate('/')} className="fw-semibold">홈</Nav.Link>
             <Nav.Link
               onClick={() => {
@@ -71,7 +72,7 @@ function NavbarComponent({ onSearchClick }) {
             <NavDropdown title="서비스 안내" id="navbarScrollingDropdown" className="fw-semibold">
               <NavDropdown.Item href="#action3">이용 방법</NavDropdown.Item>
               <NavDropdown.Item href="#action4">예약 조회</NavDropdown.Item>
-              <NavDropdown.Divider />
+              <NavDropdown.Divider/>
               <NavDropdown.Item href="#action5">고객센터</NavDropdown.Item>
             </NavDropdown>
           </Nav>
@@ -83,7 +84,7 @@ function NavbarComponent({ onSearchClick }) {
                 type="search"
                 placeholder="차량 검색..."
                 className="rounded-pill px-3"
-                style={{ fontSize: '14px', width: '200px', backgroundColor: '#f8f9fa', border: 'none' }}
+                style={{fontSize: '14px', width: '200px', backgroundColor: '#f8f9fa', border: 'none'}}
                 aria-label="Search"
               />
             </Form>
@@ -91,12 +92,25 @@ function NavbarComponent({ onSearchClick }) {
             <Nav className="gap-2">
               {isAuthenticated ? (
                 <div className="d-flex align-items-center gap-3">
+                  {user.roles?.includes("ROLE_ADMIN") && (
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      className="rounded-pill px-3"
+                      style={{ fontSize: '12px', fontWeight: '600' }}
+                      onClick={() => navigate('/admin')}
+                    >
+                      관리자 페이지
+                    </Button>
+                  )}
+
                   <span
-                    onClick={() => user.roles?.includes('ROLE_USER') ? navigate('/mypage') : navigate('/')}
+                    onClick={() => navigate('/mypage')}
                     style={{ cursor: 'pointer', fontSize: '14px', fontWeight: '500', color: '#555' }}
                   >
                     <strong>{user.name}</strong> 님
                   </span>
+
                   <Button
                     variant="dark"
                     size="sm"
@@ -111,7 +125,7 @@ function NavbarComponent({ onSearchClick }) {
                   <Button
                     variant="link"
                     className="text-decoration-none text-dark fw-medium"
-                    style={{ fontSize: '14px' }}
+                    style={{fontSize: '14px'}}
                     onClick={() => navigate('/login')}
                   >
                     로그인
