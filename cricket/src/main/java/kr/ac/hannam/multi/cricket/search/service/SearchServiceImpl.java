@@ -15,6 +15,13 @@ public class SearchServiceImpl implements SearchService {
     private SearchMapper searchMapper;
 
     @Override
+    public List<CarsVO> readCarListByKeyword(String keyword) {
+        List<CarsVO> carList = searchMapper.selectCarListByKeyword(keyword);
+
+        return carList;
+    }
+
+    @Override
     public List<CarsVO> readSearchedCarList(String modelId) {
         List<CarsVO> searchedCarList = searchMapper.selectSearchedCarList(modelId);
 

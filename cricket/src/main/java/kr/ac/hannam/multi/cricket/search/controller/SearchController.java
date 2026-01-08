@@ -49,4 +49,11 @@ public class SearchController {
         List<CarsVO> list = searchService.readCarListByBudget(minPrice, maxPrice, brandId);
         return ResponseEntity.ok(list);
     }
+
+    @GetMapping("keyword")
+    public ResponseEntity<List<CarsVO>> readCarListByKeyword(@RequestParam(name = "q") String keyword) {
+        List<CarsVO> list = searchService.readCarListByKeyword(keyword);
+
+        return ResponseEntity.ok(list);
+    }
 }

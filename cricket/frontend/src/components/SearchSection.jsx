@@ -4,8 +4,7 @@ import {FaSearch, FaCheck} from "react-icons/fa";
 import axios from "axios";
 import "../css/SearchSection.css";
 
-// 컴포넌트 전체를 forwardRef로 감싸야 합니다.
-const SearchSection = forwardRef(({setCars, resultSectionRef}, ref) => {
+const SearchSection = forwardRef(({setCars, resultSectionRef, onGlobalSearch}, ref) => {
   const hashtags = ["더 뉴 그랜저", "G80 (RG3)", "GV80", "그랜저 IG", "K5 3세대"];
   const [activeTab, setActiveTab] = useState("wanted");
   const [origin, setOrigin] = useState("국산");
@@ -16,6 +15,7 @@ const SearchSection = forwardRef(({setCars, resultSectionRef}, ref) => {
   const [selectedModel, setSelectedModel] = useState("");
   const [minPrice, setMinPrice] = useState("0");
   const [maxPrice, setMaxPrice] = useState("9999");
+  const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
     axios.get("/api/search/brandList")
@@ -93,6 +93,10 @@ const SearchSection = forwardRef(({setCars, resultSectionRef}, ref) => {
         .catch((err) => console.error("가격 검색 실패", err));
     }
   }
+  const handleKeywordSearch = (e) => {
+    if (e) e.preventDefault();
+    onGlobalSearch(keyword); // App.js에서 받은 함수 호출
+  };
 
   const scrollToResult = () => {
     setTimeout(() => {
@@ -113,34 +117,43 @@ const SearchSection = forwardRef(({setCars, resultSectionRef}, ref) => {
       }}
     >
       <Container>
-        {/* 상단 타이틀 섹션 */}
-        <div className="text-center mb-5">
-          <h2 className="fw-bold mb-4" style={{letterSpacing: "-1px", color: "#222"}}>어떤 차를 찾으세요?</h2>
-          <div style={{maxWidth: "650px", margin: "0 auto"}}>
-            <InputGroup className="mb-3 shadow-sm rounded-pill"
-                        style={{overflow: "hidden", border: "1px solid #eee", backgroundColor: "#fff"}}>
-              <Form.Control
-                placeholder="모델명을 입력해주세요. 예) 아이오닉5"
-                style={{border: "none", boxShadow: "none", padding: "15px 25px", fontSize: "1rem"}}
-              />
-              <Button variant="white" style={{border: "none", paddingRight: "20px", color: "#3677a6"}}>
-                <FaSearch size={20}/>
-              </Button>
-            </InputGroup>
+        <InputGroup className="mb-3 shadow-sm rounded-pill"
+                    style={{overflow: "hidden",
+                      border: "1px solid #eee",
+                      backgroundColor: "#fff",
+                      maxWidth: "700px",
+                      margin: "0 auto"}}>
+          <Form.Control
+            placeholder="모델명을 입력해주세요. 예) 아이오닉5"
+            style={{border: "none", boxShadow: "none", padding: "15px 25px", fontSize: "1rem"}}
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleKeywordSearch()}
+          />
+          <Button
+            variant="white"
+            style={{border: "none", paddingRight: "20px", color: "#3677a6"}}
+            onClick={handleKeywordSearch}
+          >
+            <FaSearch size={20}/>
+          </Button>
+        </InputGroup>
 
-            <div className="d-flex justify-content-center flex-wrap gap-2 mt-4">
-              {hashtags.map((tag, idx) => (
-                <Button
-                  key={idx}
-                  variant="light"
-                  className="rounded-pill px-3 py-1 border-0 shadow-sm"
-                  style={{fontSize: "13px", backgroundColor: "#fff", color: "#666", transition: "all 0.2s"}}
-                >
-                  #{tag}
-                </Button>
-              ))}
-            </div>
-          </div>
+        <div className="d-flex justify-content-center flex-wrap gap-2 mt-4">
+          {hashtags.map((tag, idx) => (
+            <Button
+              key={idx}
+              variant="light"
+              className="rounded-pill px-3 py-1 border-0 shadow-sm"
+              style={{fontSize: "13px", backgroundColor: "#fff", color: "#666", transition: "all 0.2s"}}
+              onClick={() => {
+                setKeyword(tag);
+                onGlobalSearch(tag);
+              }}
+            >
+              #{tag}
+            </Button>
+          ))}
         </div>
 
         {/* 하단 검색 박스 */}
