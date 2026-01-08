@@ -1,18 +1,27 @@
-import React from "react";
+import React, {useState} from "react";
 import {Button, Container, Form, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth";
 import toast from "react-hot-toast";
 
-function NavbarComponent({onSearchClick}) {
+function NavbarComponent({onSearchClick, onGlobalSearch}) {
   const navigate = useNavigate();
   const {user, logout} = useAuth();
   const isAuthenticated = !!user;
+  const [keyword, setKeyword] = useState("");
 
   const handleLogout = () => {
     logout();
     toast('로그아웃 되었습니다.');
     navigate('/');
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (window.location.pathname !== '/') {
+      navigate('/');
+    }
+    onGlobalSearch(keyword);
   };
 
   return (
@@ -75,7 +84,7 @@ function NavbarComponent({onSearchClick}) {
           {/* 우측 검색창 및 인증 버튼 */}
           <div className="ms-auto d-flex align-items-center gap-4">
             {/* 검색바 디자인 개선 */}
-            <Form className="d-none d-xl-flex position-relative">
+            <Form className="d-none d-xl-flex position-relative" onSubmit={handleSearchSubmit}>
               <Form.Control
                 type="search"
                 placeholder="어떤 차를 찾으시나요?"
@@ -86,6 +95,8 @@ function NavbarComponent({onSearchClick}) {
                   backgroundColor: 'rgba(0,0,0,0.04)',
                   height: '40px'
                 }}
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
               />
             </Form>
 

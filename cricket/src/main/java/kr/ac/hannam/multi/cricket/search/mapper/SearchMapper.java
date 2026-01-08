@@ -10,6 +10,8 @@ import java.util.List;
 
 @Mapper
 public interface SearchMapper {
+    public List<CarsVO> selectCarListByKeyword(@Param("keyword") String keyword);
+
     public List<CarsVO> selectSearchedCarList(String modelId);
 
     public List<CarsVO> selectCarListByBudget(@Param("minPrice") int minPrice, @Param("maxPrice") int maxPrice, @Param("brandId") String brandId);
@@ -17,6 +19,4 @@ public interface SearchMapper {
     public List<CarBrandsVO> selectCarBrandsList();
 
     public List<CarModelsVO> selectCarModelsList(String brandId);
-
-
 }

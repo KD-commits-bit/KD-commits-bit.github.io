@@ -32,6 +32,21 @@ function App() {
   const searchSectionRef = useRef(null);
   const resultSectionRef = useRef(null);
 
+  const handleKeywordSearch = (keyword) => {
+    if (!keyword.trim()) {
+      alert("검색어를 입력해주세요.");
+      return;
+    }
+
+    axios.get(`/api/search/keyword`, { params: { q: keyword } })
+      .then((res) => {
+        setCars(res.data);
+        // 검색 결과 섹션으로 스크롤 이동
+        resultSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      })
+      .catch((err) => console.error("키워드 검색 실패:", err));
+  };
+
   const fetchAllCars = (showLoadingScreen = true) => {
     if (showLoadingScreen) {
       setLoading(true);
@@ -79,12 +94,12 @@ function App() {
       <Routes>
         <Route path="/" element={
           <>
-            <NavbarComponent onSearchClick={handleScrollToSearch}/>
+            <NavbarComponent onSearchClick={handleScrollToSearch} onGlobalSearch={handleKeywordSearch}/>
             <header className="App-header" style={{textAlign: "center", paddingTop: '80px', marginBottom: "50px"}}>
               <CarouselComponent onScrollDown={handleScrollToSearch}/>
             </header>
 
-            <SearchSection ref={searchSectionRef} setCars={setCars} resultSectionRef={resultSectionRef}/>
+            <SearchSection ref={searchSectionRef} setCars={setCars} resultSectionRef={resultSectionRef} onGlobalSearch={handleKeywordSearch}/>
 
             <section ref={resultSectionRef} style={{ padding: "100px 0", backgroundColor: "#fcfcfc" }}>
               <Container>
