@@ -1,0 +1,40 @@
+.google-login {
+    height: 45px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    border: 1px solid #dadce0;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.kakao-login {
+    height: 45px;
+    border-radius: 8px !important;
+    font-weight: 500;
+    font-size: 14px;
+    background-color: #FEE500 !important;
+    border: none;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.naver-login {
+    height: 45px;
+    border-radius: 8px !important;
+    font-weight: 500;
+    font-size: 14px;
+    background-color: #03C75A !important;
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}

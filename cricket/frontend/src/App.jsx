@@ -32,6 +32,9 @@ function App() {
   const searchSectionRef = useRef(null);
   const resultSectionRef = useRef(null);
 
+
+  console.log(user);
+
   const handleKeywordSearch = (keyword) => {
     if (!keyword.trim()) {
       alert("검색어를 입력해주세요.");

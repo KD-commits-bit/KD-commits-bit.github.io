@@ -6,8 +6,7 @@ import toast from "react-hot-toast";
 
 function NavbarComponent({onSearchClick, onGlobalSearch}) {
   const navigate = useNavigate();
-  const {user, logout} = useAuth();
-  const isAuthenticated = !!user;
+  const {user, logout, isAuthenticated} = useAuth();
   const [keyword, setKeyword] = useState("");
 
   const handleLogout = () => {

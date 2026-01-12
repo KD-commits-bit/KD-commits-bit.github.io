@@ -4,6 +4,7 @@ import apiClient from "../api/axios";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
+import '../css/Login.css';
 
 function Login() {
   const [formData, setFormData] = useState({ id: "", password: "" });
@@ -41,6 +42,11 @@ function Login() {
     } catch (err) {
       toast.error("관리자 인증에 실패했습니다.");
     }
+  };
+
+  const handleGoogleLogin = () => {
+    // Spring Security의 기본 OAuth2 로그인 엔드포인트로 이동
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
 
   return (
@@ -90,6 +96,57 @@ function Login() {
                   <div className="d-grid">
                     <Button type="submit" variant="success" size="lg" className="rounded-pill fw-bold">
                       로그인
+                    </Button>
+                  </div>
+
+                  {/* 소셜 로그인 섹션 */}
+                  <div className="d-flex align-items-center my-4">
+                    <div style={{ flex: 1, height: '1px', backgroundColor: '#eee' }}></div>
+                    <span className="mx-3 text-muted" style={{ fontSize: '12px' }}>간편 로그인</span>
+                    <div style={{ flex: 1, height: '1px', backgroundColor: '#eee' }}></div>
+                  </div>
+
+                  <div className="d-grid gap-2">
+                    {/* 공통 스타일: height: '45px'로 통일 */}
+
+                    {/* 구글 버튼 */}
+                    <Button
+                      variant="light"
+                      onClick={handleGoogleLogin}
+                      className={'google-login'}
+                    >
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
+                        style={{ width: '18px', position: 'absolute', left: '15px' }}
+                        alt="google"
+                      />
+                      <span className="w-100 text-center">Google로 로그인</span>
+                    </Button>
+
+                    {/* 카카오 버튼 */}
+                    <Button
+                      onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/kakao"}
+                      className={'kakao-login'}
+                    >
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/e/e3/KakaoTalk_logo.svg"
+                        style={{ width: '20px', position: 'absolute', left: '14px' }}
+                        alt="kakao"
+                      />
+                      <span className="w-100 text-center">카카오 로그인</span>
+                    </Button>
+
+                    {/* 네이버 버튼 */}
+                    <Button
+                      onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/naver"}
+                      className={'naver-login'}
+                    >
+                      <img
+                        src="https://www.naver.com/favicon.ico"
+                        style={{ width: '20px', position: 'absolute', left: '14px' }}
+                        alt="naver"
+                      />
+                      <span className="w-100 text-center">네이버 로그인</span>
                     </Button>
                   </div>
                 </Form>
