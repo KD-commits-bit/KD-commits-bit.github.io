@@ -82,4 +82,25 @@ public class JWTProvider {
             throw new RuntimeException("Token parsing or verification failed", e);
         }
     }
+
+    public String createTokenForOAuth2(String email, String role) {
+        try {
+            JWSSigner signer = new MACSigner(secretKey);
+
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .subject(email) // 숫자가 아닌 이메일을 직접 넣음
+                    .issuer("http://www.part8.com")
+                    .issueTime(new Date())
+                    .expirationTime(new Date(System.currentTimeMillis() + VALID_TERM))
+                    .claim("scope", java.util.List.of(role)) // 권한 직접 주입
+                    .build();
+
+            SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
+            signedJWT.sign(signer);
+
+            return signedJWT.serialize();
+        } catch (JOSEException e) {
+            throw new RuntimeException("Token creation failed", e);
+        }
+    }
 }

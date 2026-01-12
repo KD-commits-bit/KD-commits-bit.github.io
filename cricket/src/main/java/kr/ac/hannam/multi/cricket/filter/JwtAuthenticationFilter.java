@@ -24,6 +24,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        return path.startsWith("/login/oauth2/") || path.startsWith("/oauth2/");
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = resolveToken(request);
 
@@ -33,9 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
                 SecurityContextHolder.clearContext();
-                //response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
-                logger.warn("JWT token processing error: " + e.getMessage());
-                //return;
+                logger.debug("인증 실패 또는 미가입 사용자 접근: " + e.getMessage());
             }
         }
 

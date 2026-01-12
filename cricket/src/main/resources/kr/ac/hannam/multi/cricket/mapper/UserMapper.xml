@@ -21,8 +21,32 @@
              , B.CREATED_AT
              , B.ADDRESS_LINE_1
         FROM USERS A
-  INNER JOIN USER_ADDRESS B ON A.USER_NO=B.USER_NO
+   LEFT JOIN USER_ADDRESS B ON A.USER_NO=B.USER_NO
        WHERE A.USER_EMAIL=#{username}
+    </select>
+
+    <select id="findByEmail" resultType="kr.ac.hannam.multi.cricket.vo.UserVO">
+        SELECT A.USER_NO
+             , A.USER_EMAIL
+             , A.USER_PASSWORD
+             , A.USER_NAME
+             , A.USER_REGION
+             , A.USER_PROFILE_IMG
+             , A.USER_PHONE
+             , A.USER_CREATED_AT
+             , B.ADDRESS_ID
+             , B.ZIPCODE
+             , B.SIDO
+             , B.SIGUNGU
+             , B.EUPMYUNDONG
+             , B.ROAD_NAME
+             , B.ADDRESS_LINE_2
+             , B.IS_DEFAULT
+             , B.CREATED_AT
+             , B.ADDRESS_LINE_1
+        FROM USERS A
+                 LEFT JOIN USER_ADDRESS B ON A.USER_NO=B.USER_NO
+        WHERE A.USER_EMAIL=#{userEmail}
     </select>
 
     <select id="selectUserCount" resultType="int">
