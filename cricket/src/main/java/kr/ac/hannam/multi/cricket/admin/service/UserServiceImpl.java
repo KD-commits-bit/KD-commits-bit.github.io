@@ -13,4 +13,9 @@ public class UserServiceImpl implements UserService{
     public int getUserCount() {
         return userMapper.selectUserCount();
     }
+
+    @Override
+    public int getTodayUserCount() {
+        return userMapper.selectTodayUserCount();
+    }
 }

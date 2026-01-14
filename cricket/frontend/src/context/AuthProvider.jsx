@@ -1,5 +1,5 @@
-import {useState, useEffect} from "react";
-import {AuthContext} from "./AuthContext";
+import { useState, useEffect } from "react";
+import { AuthContext } from "./AuthContext";
 import apiClient from "../api/axios";
 
 export const AuthProvider = ({ children }) => {
@@ -9,39 +9,30 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const verifyUser = async () => {
-      const token = localStorage.getItem("accessToken");
-
-       if (!token) {
+      try {
+        // Don't check localStorage. Just ask the backend who we are.
+        // The browser will automatically send the HttpOnly cookie.
+        const response = await apiClient.get("/api/auth/me");
+        const userData = response.data;
+        if (userData) {
+          setIsAuthenticated(true);
+          setUser(userData);
+        }
+      } catch (error) {
+        // If the request fails, it means we're not authenticated.
+        console.log("No active session or verification failed.");
         setIsAuthenticated(false);
         setUser(null);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      if (token) {
-        try {
-          // apiClient has the interceptor to add the token
-          const response = await apiClient.get("/api/auth/me");
-          const userData = response.data;
-          if (userData) {
-            setIsAuthenticated(true);
-            setUser(userData);
-          }
-          // eslint-disable-next-line no-unused-vars
-        } catch (error) {
-          console.log("Token verification failed, removing token.");
-          localStorage.removeItem("accessToken");
-          setIsAuthenticated(false);
-          setUser(null);
-        }
-      }
-      setLoading(false);
     };
     verifyUser();
   }, []);
 
   const login = (loginData) => {
-    // loginData is expected to be { token: "...", user: { ... } }
+    // This function is likely for a standard username/password form
+    // and can be kept for that purpose. It is not used in the Oauth2 flow.
     localStorage.setItem("accessToken", loginData.token);
     setIsAuthenticated(true);
     setUser(loginData.user);
@@ -53,13 +44,13 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
-      localStorage.removeItem("accessToken");
+      // The backend is responsible for clearing the cookie.
+      // We just need to update the state.
       setIsAuthenticated(false);
       setUser(null);
     }
   };
 
-  
   if (loading) {
     return <div>Loading application...</div>;
   }

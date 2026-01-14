@@ -1,4 +1,5 @@
 package kr.ac.hannam.multi.cricket.common.controller;
+
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -39,17 +40,18 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, ServletResponse servletResponse, HttpServletResponse response) {
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getId(),
-                loginRequest.getPassword()
-            )
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getId(),
+                        loginRequest.getPassword()
+                )
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.authenticationToToken(authentication);
 
 
-;       Cookie cookie = new Cookie("access_token", token);
+        ;
+        Cookie cookie = new Cookie("access_token", token);
         cookie.setHttpOnly(true);
         cookie.setSecure(false); // https면 true
         cookie.setPath("/");
@@ -63,6 +65,9 @@ public class AuthController {
         String id = null;
         String name = null;
         String phone = null;
+        String zipcode = null;
+        String addressLine1 = null;
+        String addressLine2 = null;
 
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -75,6 +80,10 @@ public class AuthController {
             id = user.getUserEmail();
             name = user.getUserName();
             phone = user.getUserPhone();
+            zipcode = user.getZipcode();
+            addressLine1 = user.getAddressLine1();
+            addressLine2 = user.getAddressLine2();
+
         } else if (userDetails instanceof AdminPrincipal) {
             AdminVO admin = ((AdminPrincipal) userDetails).getAdminVO();
 
@@ -85,14 +94,17 @@ public class AuthController {
         }
 
         return ResponseEntity.ok(Map.of(
-            "token", token,
-            "user", Map.of(
-                "no", no,
-                "id", id,
-                "name", name,
-                "roles", roles,
-                "phone", phone
-            )
+                "token", token,
+                "user", Map.of(
+                        "no", no,
+                        "id", id,
+                        "name", name,
+                        "roles", roles,
+                        "phone", phone,
+                        "zipcode", zipcode != null ? zipcode : "",
+                        "addressLine1", addressLine1 != null ? addressLine1 : "",
+                        "addressLine2", addressLine2 != null ? addressLine2 : ""
+                )
         ));
     }
 
@@ -113,11 +125,17 @@ public class AuthController {
         String no = null;
         String name = null;
         String phone = null;
+        String zipcode = null;
+        String addressLine1 = null;
+        String addressLine2 = null;
 
         if (fullUserDetails instanceof UserPrincipal) {
             no = ((UserPrincipal) fullUserDetails).getUserVO().getUserNo();
             name = ((UserPrincipal) fullUserDetails).getUserVO().getUserName();
             phone = ((UserPrincipal) fullUserDetails).getUserVO().getUserPhone();
+            zipcode = ((UserPrincipal) fullUserDetails).getUserVO().getZipcode();
+            addressLine1 = ((UserPrincipal) fullUserDetails).getUserVO().getAddressLine1();
+            addressLine2 = ((UserPrincipal) fullUserDetails).getUserVO().getAddressLine2();
         } else if (fullUserDetails instanceof AdminPrincipal) {
             no = ((AdminPrincipal) fullUserDetails).getAdminVO().getAdminNo();
             name = ((AdminPrincipal) fullUserDetails).getAdminVO().getAdminName();
@@ -129,7 +147,10 @@ public class AuthController {
             "id", id,
             "name", name,
             "roles", roles,
-            "phone", phone
+            "phone", phone,
+            "zipcode", zipcode != null ? zipcode : "",
+            "addressLine1", addressLine1 != null ? addressLine1 : "",
+            "addressLine2", addressLine2 != null ? addressLine2 : ""
         ));
     }
 }

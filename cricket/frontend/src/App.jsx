@@ -6,7 +6,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import CarouselComponent from "./components/CarouselComponent.jsx";
 import axios from "axios";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import Mypage from "./pages/Mypage.jsx";
 import CarDetailPage from "./pages/CarDetailPage.jsx";
 import EditProfile from "./pages/EditProfile.jsx";
@@ -15,6 +15,11 @@ import AdminPage from "./pages/AdminPage.jsx";
 import CarRegisterPage from "./pages/CarRegisterPage.jsx";
 import ProtectedRoute  from "./routes/ProtectedRoute.jsx";
 import CarPurchase from "./pages/CarPurchase.jsx";
+import SearchSection from "./components/SearchSection.jsx";
+import "./App.css"
+import {Button, Col, Container, Row} from "react-bootstrap";
+import AdminCarListPage from "./pages/AdminCarListPage.jsx";
+import { Toaster } from 'react-hot-toast';
 
 
 
@@ -24,8 +29,33 @@ function App() {
   const [error, setError] = useState(null);
   const {user} = useAuth();
 
-  useEffect(() => {
-    axios.get("http://localhost:8080/api/car/all")
+  const searchSectionRef = useRef(null);
+  const resultSectionRef = useRef(null);
+
+
+  console.log(user);
+
+  const handleKeywordSearch = (keyword) => {
+    if (!keyword.trim()) {
+      alert("검색어를 입력해주세요.");
+      return;
+    }
+
+    axios.get(`/api/search/keyword`, { params: { q: keyword } })
+      .then((res) => {
+        setCars(res.data);
+        // 검색 결과 섹션으로 스크롤 이동
+        resultSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      })
+      .catch((err) => console.error("키워드 검색 실패:", err));
+  };
+
+  const fetchAllCars = (showLoadingScreen = true) => {
+    if (showLoadingScreen) {
+      setLoading(true);
+    }
+
+    axios.get("/api/car/all")
       .then((response) => {
         setCars(response.data);
         setLoading(false);
@@ -35,7 +65,15 @@ function App() {
         setError(e);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchAllCars(true);
   }, []);
+
+  const handleShowAll = () => {
+    fetchAllCars(false);
+  };
 
   if (loading) {
     return <div>로딩중...</div>;
@@ -45,32 +83,51 @@ function App() {
     return <div>Error: {error.message}</div>;
   }
 
+  const handleScrollToSearch = () => {
+    searchSectionRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
+
   return (
     <div className="App">
+      <Toaster position="top-center" reverseOrder={false} />
+
       <Routes>
         <Route path="/" element={
           <>
-            <NavbarComponent/>
+            <NavbarComponent onSearchClick={handleScrollToSearch} onGlobalSearch={handleKeywordSearch}/>
             <header className="App-header" style={{textAlign: "center", paddingTop: '80px', marginBottom: "50px"}}>
-              <CarouselComponent/>
+              <CarouselComponent onScrollDown={handleScrollToSearch}/>
             </header>
 
-            <section
-              style={{
-                minHeight: "100vh",
-                backgroundColor: "#f9f9f9",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexWrap: "wrap",
-                width: "80%",
-                margin: "0 auto",
-                paddingBottom: "100px",
-              }}
-            >
-              {cars.map((car) => (
-                <CardComponent key={car.carId} car={car}/>
-              ))}
+            <SearchSection ref={searchSectionRef} setCars={setCars} resultSectionRef={resultSectionRef} onGlobalSearch={handleKeywordSearch}/>
+
+            <section ref={resultSectionRef} style={{ padding: "100px 0", backgroundColor: "#fcfcfc" }}>
+              <Container>
+                <div className="d-flex justify-content-between align-items-end mb-5">
+                  <div>
+                    <h3 className="fw-bold mb-1">지금 바로 구매 가능한 차량</h3>
+                    <p className="text-muted">엄격한 기준을 통과한 무사고 차량들입니다.</p>
+                  </div>
+                  <Button variant="outline-secondary" className="rounded-pill px-4" onClick={handleShowAll}>전체차량보기</Button>
+                </div>
+
+                <Row className="g-4">
+                  {cars.length > 0 ? (
+                    cars.map((car) => (
+                      <Col key={car.carId} lg={3} md={4} sm={6} className="d-flex">
+                        <CardComponent car={car}/>
+                      </Col>
+                    ))
+                  ) : (
+                    <Col className="text-center py-5">
+                      <p className="text-muted">검색 조건에 맞는 차량이 없습니다.</p>
+                    </Col>
+                  )}
+                </Row>
+              </Container>
             </section>
           </>
         }/>
@@ -99,6 +156,7 @@ function App() {
        <Route element={<ProtectedRoute allowedRoles={["ROLE_ADMIN"]} />}>
         <Route path="/admin" element={<AdminPage/>}/>
         <Route path="/admin/car/car_register" element={<CarRegisterPage/>}/>
+        <Route path="/admin/car/list" element={<AdminCarListPage/>} />
       </Route>
       </Routes>
     </div>

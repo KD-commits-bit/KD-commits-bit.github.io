@@ -1,5 +1,6 @@
 package kr.ac.hannam.multi.cricket.user.edituser.mapper;
 
+import kr.ac.hannam.multi.cricket.user.edituser.dto.UserProfileUpdateRequest;
 import kr.ac.hannam.multi.cricket.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -10,6 +11,8 @@ public interface EditUserMapper {
                           @Param("hashedPassword") String hashedPassword,
                           @Param("email") String email
     );
+
+    public int updateUserAddress(UserProfileUpdateRequest request);
 
     public int deleteUser(@Param("userNo") String userNo);
 
