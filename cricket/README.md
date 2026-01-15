@@ -1,21 +1,32 @@
 ### 🛠 Tech Stack
-**Frontend** ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+#### Frontend  
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)  
+- CSR 기반 SPA 구성 및 컴포넌트 단위 상태 관리
 
-**Backend** ![Spring Boot](https://img.shields.io/badge/spring%20boot-%236DB33F.svg?style=for-the-badge&logo=springboot&logoColor=white)
-![Oracle](https://img.shields.io/badge/oracle-%23F80000.svg?style=for-the-badge&logo=oracle&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)  
+- ES6+ 문법 기반 비동기 처리 및 컴포넌트 로직 구현
 
-**Tools & Others** ![PortOne](https://img.shields.io/badge/PortOne-FF5C00?style=for-the-badge&logo=target&logoColor=white)
-![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
-![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)  
+- 공통 API 모듈화 및 인터셉터 기반 인증 처리
+
+#### Backend
+![Spring Boot](https://img.shields.io/badge/spring%20boot-%236DB33F.svg?style=for-the-badge&logo=springboot&logoColor=white)  
+- REST API 설계 및 결제·인증 비즈니스 로직 구현
+
+![Oracle](https://img.shields.io/badge/oracle-%23F80000.svg?style=for-the-badge&logo=oracle&logoColor=white)  
+- 트랜잭션 기반 결제 데이터 무결성 및 관계형 모델링
+
+#### Tools & Others
+![PortOne](https://img.shields.io/badge/PortOne-FF5C00?style=for-the-badge&logo=target&logoColor=white)  
+- 결제 요청/승인/검증 플로우 연동
+
+![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)  
+- Git Flow 기반 협업 및 코드 버전 관리
 
 # 🏎️ HCar: 중고차 거래 커머스 플랫폼
 
 > **자동차를 향한 열정으로 구현한 현대적 중고차 매매 시스템**
-
 ---
-
 ### 👥 Team Members
 | <img src="https://github.com/KD-commits-bit.png" width="100"> | <img src="https://github.com/grrr-h.png" width="100"> |
 | :---: | :---: |
