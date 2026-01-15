@@ -20,6 +20,9 @@
 ![PortOne](https://img.shields.io/badge/PortOne-FF5C00?style=for-the-badge&logo=target&logoColor=white)  
 - 결제 요청/승인/검증 플로우 연동
 
+![AWS S3](https://img.shields.io/badge/AWS%20S3-569A31?style=for-the-badge&logo=amazonaws&logoColor=white)  
+- 차량 이미지 파일 업로드 및 정적 리소스 관리
+
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)  
 - Git Flow 기반 협업 및 코드 버전 관리
 
@@ -28,19 +31,26 @@
 > **자동차를 향한 열정으로 구현한 현대적 중고차 매매 시스템**
 
 ## 📸 Service Preview
+> 실제 구현 화면 일부 (메인화면 → 구매 → 결제 흐름)
 <img src="./docs/images/main_1.png" width="800" />
+<img src="./docs/images/purchase.png" width="800" />
+<img src="./docs/images/payment.png" width="800" />
+
+<details>
+<summary>📌 기타 화면 보기</summary>
+
 <img src="./docs/images/main_2.png" width="800" />
 <img src="./docs/images/login.png" width="800" />
-<img src="./docs/images/login_kakao.png" width="800" />
-<img src="./docs/images/purchase.png" width="800" />
+
+</details>
 
 ---
 
 ### 👥 Team Members
-| <img src="https://github.com/KD-commits-bit.png" width="100"> | <img src="https://github.com/grrr-h.png" width="100"> |
-| :---: | :---: |
-| **[서경덕](https://github.com/KD-commits-bit)** | **[홍태규](https://github.com/grrr-h)** |
-| Frontend / Backend | Frontend / Backend |
+| 이름 | 담당 |
+| --- | --- |
+| 서경덕 | 결제 시스템, OAuth 인증, Backend API, SPA 구조, 상태 관리, UI/UX |
+| 홍태규 | SPA 구조, 상태 관리, UI/UX, AWS S3, 관리자 페이지 |
 
 ---
 
@@ -64,6 +74,12 @@
 - 정보처리기사 실기 시험에서 접한 이론을 실제 서비스에 이식.
 - 공식 문서를 참고하여 인증 코드 발급 및 토큰 처리 로직 직접 구현.
 - 보안 인증 구조에 대한 이해도 확장.
+
+### 🗂️ 파일 업로드 처리 (AWS S3)
+- 차량 이미지 업로드 시 서버에서 S3로 파일 전송
+- DB에는 파일 URL만 저장하여 서버 디스크 의존성 제거
+- 다중 이미지 업로드 및 조회 성능 개선
+
 
 ## 4. 협업의 진화: SVN에서 Git으로
 기존의 SVN 방식을 탈피하고, 현대적인 협업을 위해 **Git**을 전격 도입했습니다.
