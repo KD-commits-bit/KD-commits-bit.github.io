@@ -47,9 +47,10 @@
 
 > 실제 구현 화면 일부 (관리자 로그인 → 관리자 페이지 → 차량 등록 및 회원과 차량 관리)
 <img src="./docs/images/admin_login.png" width="800" />
-<img src="./docs/images/admin_main.png" width="800" />
+<img src="./docs/images/ admin_main.png" width="800" />
 <img src="./docs/images/car_reg.png" width="800" />
-<img src="./docs/images/car_mng.png" width="800" />
+<img src="./docs/images/ car_mng.png" width="800" />
+
 
 ---
 
